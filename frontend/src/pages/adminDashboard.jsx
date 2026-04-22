@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
-import '../styles/login.css';
+// import { useState } from 'react';
+// import { useNavigate } from 'react-router-dom'
+// import axios from '../lib/axios';
 
 function AdminDashboard() {
     return(
         <>
-            <h1>Admine Dashboard</h1>
+            <h1>Admin Dashboard</h1>
         </>
     )
 }

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
@@ -10,18 +10,20 @@ Route::get('/test', function () {
     ]);
 });
 
-Route::post('/login',[
-    AuthController::class, 'login'
-]);
-Route::post('/register',[
-    AuthController::class, 'register'
-]);
-
-Route::middleware(['auth:sanctume', 'admin'])->group(function() {
-    Route::get('/admin_dashboard', function() {
-        return 'admin only';
-    });
+Route::middleware('auth:sanctum')->get('/user', function (HttpRequest $request) {
+    return $request->user();
 });
 
+Route::middleware('auth:sanctume', 'admin')->group(function() {
+    Route::get('/admin/dashboard', function() {
+        return response()->json([
+            "message" => "admin only"
+        ]);
+    });
+    // more admin pages! 
+});
 
-Route::resource('/users', UserController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
+    // all authenticated user routes here
+});

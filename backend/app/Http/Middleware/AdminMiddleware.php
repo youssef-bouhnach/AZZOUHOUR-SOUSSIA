@@ -19,7 +19,7 @@ class AdminMiddleware
 
         /** @var \App\Models\User|null $user */
         if(!$user || $user->role !== 'admin') {
-            return response([
+            return response()->json([
                 "message" => "unauthorized"
             ], 403);
         }
