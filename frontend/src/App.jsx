@@ -8,6 +8,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import AdminDashboard from "./pages/adminDashboard";
+import VerifyEmail from "./pages/verifyEmail";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
       </Router>
     </>

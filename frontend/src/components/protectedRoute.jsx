@@ -6,6 +6,7 @@ const ProtectedRoute = ({ children, role }) => {
 
   if (loading) return <div>Loading...</div>; // wait for session check
   if (!user) return <Navigate to="/login" />;
+  // if (!user.email_verified_at) return <Navigate to="/verify-email" />;
   if (role && user.role !== role) return <Navigate to="/dashboard" />;
 
   return children;

@@ -28,9 +28,9 @@ function Register() {
       console.log("Cookies after csrf:", document.cookie);
       console.log("User registered:", response.data);
 
-      alert("Registration Successful! Please login.");
+      alert("Verify your email.");
 
-      navigate("/login");
+      navigate("/verify-email");
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors);
