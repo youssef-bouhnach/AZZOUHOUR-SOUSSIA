@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../lib/axios";
 import { useAuth } from "../context/authContext";
 import "../styles/login.css";
@@ -14,9 +14,6 @@ function Login() {
 
   const navigate = useNavigate();
   const { setUser } = useAuth();
-
-  const location = useLocation();
-  const verified = new URLSearchParams(location.search).get("verified");
 
   const handleChange = (e) => {
     setFormData({
@@ -37,14 +34,12 @@ function Login() {
 
       setUser(response.data.user); // store user in context
 
-      // test
-      console.log("User data:", response.data.user);
-
       if (response.data.user.role === "admin") {
-        navigate("/admin/dashboard");
+        window.location.href = "http://localhost:8000/admin";
       } else {
-        navigate("/dashboard");
+        navigate("/accueil");
       }
+
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -54,11 +49,6 @@ function Login() {
 
   return (
     <div className="login-container">
-      {verified && (
-        <div className="success-message">
-          ✅ Email verified! You can now login.
-        </div>
-      )}
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Welcome Back</h2>
 

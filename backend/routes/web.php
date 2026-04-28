@@ -12,16 +12,16 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     return response()->json([
-        "message" => "API is working"
+    "message" => "API is working"
     ]);
 });
 
 
 // routes/web.php
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/register', [AuthController::class , 'register']);
+    Route::post('/login', [AuthController::class , 'login']);
+    Route::post('/logout', [AuthController::class , 'logout']);
 });
 
 /** email verification */
@@ -37,7 +37,6 @@ Route::post('/email/resend', function (HttpRequest $request) {
 })->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
 
 /** the verify middleware */
-// inside this group middleware what i have to do 
 // Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 //     Route::get('/dashboard', ...);
 // });

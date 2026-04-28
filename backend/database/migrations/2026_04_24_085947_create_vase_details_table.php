@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class extends Migration 
 {
     /**
      * Run the migrations.
@@ -14,7 +14,14 @@ return new class extends Migration
         Schema::create('vase_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->unique()->constrained()->cascadeOnDelete();
-            $table->string('material')->nullable();
+            $table->enum('material', [
+                'ceramic',
+                'glass',
+                'metal',
+                'plastic',
+                'wood',
+                'other'
+            ])->nullable();
             $table->enum('style', [
                 'modern',
                 'classic',

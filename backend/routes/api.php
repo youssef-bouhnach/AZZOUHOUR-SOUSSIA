@@ -23,10 +23,15 @@ Route::middleware('auth:sanctum', 'admin')->group(function() {
     // more admin pages! 
 });
 
-// Route::middleware(['auth:sanctum'])->group(function () {
-    // Route::get('/dashboard', [DashboardController::class, 'index']);
-    // all authenticated user routes here
-// });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user/stats', function () {
+        return response()->json([
+            'products' => \App\Models\Product::count(),
+            'categories' => \App\Models\Category::count(),
+            'users' => \App\Models\User::count(),
+        ]);
+    });
+});
 
 // Admin only — index, show, create, update, delete
 Route::resource('products', ProductController::class)

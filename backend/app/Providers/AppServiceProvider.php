@@ -20,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (\BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch $switch) {
+            $switch
+                ->locales(['ar','en','fr']); // also accepts a closure
+        });
+
         FacadesRoute::prefix('api')
             ->middleware('api')
             ->group(base_path('routes/api.php'));

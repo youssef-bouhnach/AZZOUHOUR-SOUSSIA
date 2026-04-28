@@ -6,7 +6,7 @@ import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import Dashboard from "./pages/dashboard";
+import Accueil from "./pages/accueil";
 import AdminDashboard from "./pages/adminDashboard";
 import VerifyEmail from "./pages/verifyEmail";
 
@@ -19,10 +19,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/dashboard"
+            path="/accueil"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Accueil />
               </ProtectedRoute>
             }
           />

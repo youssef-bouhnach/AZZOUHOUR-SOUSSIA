@@ -25,42 +25,49 @@ class Product extends Model
     ];
 
     /**
-      CATEGORY
+     CATEGORY
      */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
     /**
-      Plant Details
+     Plant Details
      */
     public function plantDetails(): HasOne
     {
         return $this->HasOne(PlantDetails::class);
     }
     /**
-      Soil Details
+     Soil Details
      */
     public function soilDetails(): HasOne
     {
         return $this->HasOne(SoilDetails::class);
     }
     /**
-      Vase Details
+     Vase Details
      */
     public function vaseDetails(): HasOne
     {
         return $this->HasOne(VaseDetails::class);
     }
     /**
-      Service Details
+     Service Details
      */
     public function serviceDetails(): HasOne
     {
         return $this->HasOne(ServiceDetails::class);
     }
     /**
-        Product Variants!        
+     Grass Details 
+     */
+    public function grassDetails(): HasOne
+    {
+        return $this->HasOne(GrassDetails::class);
+    }
+    /**
+     Product Variants!        
      */
     public function variants(): HasMany
     {
@@ -69,22 +76,20 @@ class Product extends Model
 }
 
 /**
-    |--------------------------------------------------------------------------
-    | futur Relationships 
-    |--------------------------------------------------------------------------
-
-        // Orders (many-to-many via pivot)
-        public function orders()
-        {
-            return $this->belongsToMany(Order::class, 'commande_produit')
-                        ->withPivot('quantite')
-                        ->withTimestamps();
-        }
-
-        // Reservations
-        public function reservations()
-        {
-            return $this->hasMany(Reservation::class);
-        }
-    }
+ |--------------------------------------------------------------------------
+ | futur Relationships 
+ |--------------------------------------------------------------------------
+ // Orders (many-to-many via pivot)
+ public function orders()
+ {
+ return $this->belongsToMany(Order::class, 'commande_produit')
+ ->withPivot('quantite')
+ ->withTimestamps();
+ }
+ // Reservations
+ public function reservations()
+ {
+ return $this->hasMany(Reservation::class);
+ }
+ }
  */

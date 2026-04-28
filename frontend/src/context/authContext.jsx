@@ -7,23 +7,40 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user on app load — if session cookie is valid, returns user
-  useEffect(() => {
-    axios.get("/api/user")
-      .then(res => setUser(res.data))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
-
   const login = async (formData) => {
     await axios.get("/sanctum/csrf-cookie");
     const res = await axios.post("/auth/login", formData);
-    setUser(res.data.user); // 👈 store in state
+    setUser(res.data); // store in state
+    return res.data;
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/user");
+        setUser(res.data);
+      } catch(err) {
+        if (err.response?.status === 401) {
+          setUser(null);
+        } else {
+          console.error(err); // this logic don't kill session
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const logout = async () => {
-    await axios.post("/auth/logout");
-    setUser(null);
+    try {
+      await axios.post("/auth/logout");
+      
+    } finally {
+      setUser(null);
+      setLoading(false);
+    }
   };
 
   return (

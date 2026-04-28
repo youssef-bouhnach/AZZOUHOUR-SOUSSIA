@@ -16,7 +16,7 @@ class CategoryProductDetailVariantsSeeder extends Seeder
         $vases = Category::create(['name' => 'Vases']);
         $services = Category::create(['name' => 'Services']);
         $flowers = Category::create(['name' => 'Flowers']);
-/*
+
         // 🌳 TREE PRODUCT
         $tree = Product::create([
             'name' => 'Olive Tree',
@@ -143,6 +143,6 @@ class CategoryProductDetailVariantsSeeder extends Seeder
             ['duration' => 60, 'price' => 100, 'stock' => 100],
             ['duration' => 180, 'price' => 250, 'stock' => 50],
         ]);
-*/
+
     }
 }
