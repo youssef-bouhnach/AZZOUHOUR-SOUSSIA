@@ -1,10 +1,11 @@
 import { Leaf, Instagram, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navLinks = [
-  { href: "#shop", label: "Shop" },
-  { href: "#services", label: "Services" },
-  { href: "#story", label: "Our Story" },
-  { href: "#contact", label: "Contact" },
+  { href: "/shop", label: "Shop" },
+  { href: "/categories", label: "Categories" },
+  { href: "/story", label: "Our Story" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const socialLinks = [
@@ -20,12 +21,12 @@ export const Footer = () => {
         <div className="grid gap-10 md:grid-cols-3 md:gap-8">
           {/* Brand */}
           <div>
-            <a href="#" className="inline-flex items-center gap-2 font-display text-lg font-semibold text-primary">
+            <Link to="/" className="inline-flex items-center gap-2 font-display text-lg font-semibold text-primary">
               <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-leaf text-primary-foreground shadow-soft">
                 <Leaf className="h-4 w-4" />
               </span>
               AZZOUHOUR-SOUSSIA
-            </a>
+            </Link>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
               Heirloom plants, expert gardeners, and a love for the slow art of growing things.
             </p>
@@ -37,12 +38,12 @@ export const Footer = () => {
             <ul className="space-y-2.5">
               {navLinks.map((l) => (
                 <li key={l.href}>
-                  <a
-                    href={l.href}
+                  <Link
+                    to={l.href}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

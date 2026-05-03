@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { ShoppingBag, Leaf, Menu, X, User, LogOut, Settings } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/authContext";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const links = [
-  { href: "#shop", label: "Shop" },
-  { href: "#services", label: "Services" },
-  { href: "#story", label: "Our Story" },
-  { href: "#contact", label: "Contact" },
+  { href: "/shop", label: "Shop" },
+  { href: "/categories", label: "Categories" },
+  { href: "/story", label: "Our Story" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export const Navbar = () => {
@@ -58,23 +58,23 @@ export const Navbar = () => {
       >
         <div className="container flex h-16 items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 font-display text-xl font-semibold text-primary">
+          <Link to="/" className="flex items-center gap-2 font-display text-xl font-semibold text-primary">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-leaf text-primary-foreground shadow-soft">
               <Leaf className="h-4 w-4" />
             </span>
             AZZOUHOUR-SOUSSIA
-          </a>
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.href}
-                href={l.href}
+                to={l.href}
                 className="relative py-1 hover:text-primary transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all hover:after:w-full"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -126,7 +126,7 @@ export const Navbar = () => {
               size="sm"
               onClick={() => setOpen(true)}
               className="gap-2 rounded-full"
-              aria-label={`Open cart, ${count} items`}
+              aria-label={`View cart, ${count} items`}
             >
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">Cart</span>
@@ -179,14 +179,14 @@ export const Navbar = () => {
           <ul className="container py-4 flex flex-col gap-1">
             {links.map((l, i) => (
               <li key={l.href} style={{ transitionDelay: mobileOpen ? `${i * 50}ms` : "0ms" }}>
-                <a
-                  href={l.href}
+                <Link
+                  to={l.href}
                   onClick={handleLinkClick}
                   className="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

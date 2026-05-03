@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Plus, ShoppingBag, Loader2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -30,6 +30,7 @@ export const Shop = () => {
   const [loading, setLoading] = useState(true);
   const { add } = useCart();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -37,6 +38,14 @@ export const Shop = () => {
   const [selectedColor, setSelectedColor] = useState<string>("all");
   const [selectedSize, setSelectedSize] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("default");
+
+  // Read category from URL on mount
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   // Fetch products from API
   useEffect(() => {
@@ -55,6 +64,15 @@ export const Shop = () => {
     fetchProducts();
   }, []);
 
+  // Get unique colors from products
+  const availableColors = Array.from(
+    new Set(
+      products
+        .filter((p) => p.color && p.color.trim() !== "")
+        .map((p) => p.color.toLowerCase().trim())
+    )
+  ).sort();
+
   // Group products by category
   const productsByCategory = {
     flowers: products.filter((p) => p.category === "flowers"),
@@ -66,9 +84,15 @@ export const Shop = () => {
   // Apply filters
   let filteredProducts = [...products];
 
-  // Category filter
+  // Category filter - support both category_id and old category string
   if (selectedCategory !== "all") {
-    filteredProducts = filteredProducts.filter((p) => p.category === selectedCategory);
+    // Check if it's a number (category_id) or string (old category)
+    const categoryId = parseInt(selectedCategory);
+    if (!isNaN(categoryId)) {
+      filteredProducts = filteredProducts.filter((p) => p.category_id === categoryId);
+    } else {
+      filteredProducts = filteredProducts.filter((p) => p.category === selectedCategory);
+    }
   }
 
   // Price filter
@@ -87,6 +111,14 @@ export const Shop = () => {
         default:
           return true;
       }
+    });
+  }
+
+  // Color filter
+  if (selectedColor !== "all") {
+    filteredProducts = filteredProducts.filter((p) => {
+      if (!p.color) return false;
+      return p.color.toLowerCase().includes(selectedColor.toLowerCase());
     });
   }
 
@@ -224,10 +256,11 @@ export const Shop = () => {
               className="px-4 py-2 border border-gray-300 rounded-md text-sm bg-white hover:border-gray-400 transition-colors cursor-pointer"
             >
               <option value="all">All Colors</option>
-              <option value="green">Green</option>
-              <option value="pink">Pink</option>
-              <option value="yellow">Yellow</option>
-              <option value="white">White</option>
+              {availableColors.map((color) => (
+                <option key={color} value={color}>
+                  {color.charAt(0).toUpperCase() + color.slice(1)}
+                </option>
+              ))}
             </select>
             <select 
               value={selectedSize}
