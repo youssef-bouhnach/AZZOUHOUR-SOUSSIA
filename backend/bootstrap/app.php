@@ -19,9 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
         $middleware->validateCsrfTokens(except: [
-            'api/register',
-            'api/login',
-            'api/logout',
+            'auth/register',
+            'auth/login',
+            'auth/logout',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

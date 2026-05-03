@@ -45,6 +45,9 @@ class AuthController extends Controller
         // ✅ Create user
         $user = User::create($fields);
 
+        // ✅ Login user after register
+        Auth::login($user);
+
         // ✅ Regenerate session
         $request->session()->regenerate();
 

@@ -1,29 +1,37 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request as HttpRequest;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
-    return response()->json([
-        "message" => "API is working"
-    ]);
-});
+// ─── Public routes ───────────────────────────────────────────
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
 
-Route::middleware('auth:sanctum')->get('/user', function (HttpRequest $request) {
-    return $request->user();
-});
+// ─── Authenticated user routes ────────────────────────────────
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::middleware('auth:sanctume', 'admin')->group(function() {
-    Route::get('/admin/dashboard', function() {
-        return response()->json([
-            "message" => "admin only"
-        ]);
+    // Current user
+    Route::get('/user', function (Request $request) {
+        return $request->user();
     });
-    // more admin pages! 
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    // Route::get('/dashboard', [DashboardController::class, 'index']);
-    // all authenticated user routes here
+// ─── Admin only routes ────────────────────────────────────────
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+    // Product management
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{product}', [ProductController::class, 'update']);
+    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+
+    // Order management
+    Route::get('/admin/orders', [OrderController::class, 'adminIndex']);
+    Route::patch('/admin/orders/{order}/status', [OrderController::class, 'updateStatus']);
 });
