@@ -24,7 +24,7 @@ class StoreProductRequest extends FormRequest
     {
         $rules = [
             // Product
-            "name" => "required|string|max:255|unique:products,name",
+            "name" => "required|string|max:255|unique:products,name," . ($this->route('product')?->id ?? 'NULL'),
             "description" => "nullable|string",
             "price" => "required|numeric|min:0",
             "promo_price" => "nullable|numeric|min:0",
@@ -51,10 +51,10 @@ class StoreProductRequest extends FormRequest
             "variants.*.duration" => "nullable|integer",
         ];
 
-        $categoryId = $this->input('category_id');
+        $categoryId = (int) $this->input('category_id');
 
-        // Plant details (category_id = 1)
-        if ($categoryId === 1) {
+        // Plant details (category_id = 1, 6, 7, 8)
+        if (in_array($categoryId, [1, 6, 7, 8])) {
             $rules += [
                 "sunlight" => "nullable|in:full_sun,partial_shade,shade",
                 "watering" => "nullable|in:low,moderate,frequent",

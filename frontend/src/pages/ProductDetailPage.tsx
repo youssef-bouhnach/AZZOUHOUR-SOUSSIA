@@ -34,6 +34,31 @@ function ProductDetailContent() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
+    if (!id) return;
+    try {
+      const stored = localStorage.getItem("favorites");
+      const favs: number[] = stored ? JSON.parse(stored) : [];
+      setIsFavorite(favs.includes(parseInt(id)));
+    } catch {}
+  }, [id]);
+
+  const handleToggleFavorite = () => {
+    if (!product) return;
+    try {
+      const stored = localStorage.getItem("favorites");
+      const favs: number[] = stored ? JSON.parse(stored) : [];
+      let next: number[];
+      if (isFavorite) {
+        next = favs.filter((f) => f !== product.id);
+      } else {
+        next = [...favs, product.id];
+      }
+      localStorage.setItem("favorites", JSON.stringify(next));
+      setIsFavorite(!isFavorite);
+    } catch {}
+  };
+
+  useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
       
@@ -161,7 +186,7 @@ function ProductDetailContent() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={handleToggleFavorite}
                   className={`flex-1 gap-2 rounded-2xl border-2 transition-all ${
                     isFavorite
                       ? "bg-red-50 border-red-300 text-red-600 hover:bg-red-100"
@@ -224,12 +249,12 @@ function ProductDetailContent() {
               </div>
 
               {/* Stock Info */}
-              <div className="p-6 bg-green-50 border-2 border-green-200 rounded-2xl">
+              <div className={`p-6 border-2 rounded-2xl ${product.stock > 0 ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-green-900 mb-1">Availability</p>
-                    <p className="text-2xl font-bold text-green-600">
-                      {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                    <p className={`text-sm font-semibold mb-1 ${product.stock > 0 ? "text-green-900" : "text-red-900"}`}>Availability</p>
+                    <p className={`text-2xl font-bold ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+                      {product.stock > 0 ? "In Stock" : "Out of Stock"}
                     </p>
                   </div>
                   {product.stock > 0 && product.stock < 10 && (
@@ -270,9 +295,6 @@ function ProductDetailContent() {
                         <Plus className="h-5 w-5" />
                       </Button>
                     </div>
-                    <span className="text-sm text-gray-600">
-                      Max: {product.stock} available
-                    </span>
                   </div>
                 </div>
               )}

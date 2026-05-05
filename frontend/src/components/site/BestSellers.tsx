@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, Star, Eye } from "lucide-react";
+import { ArrowRight, Star, Eye, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { productsApi, type Product } from "@/services/api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const categoryLabels: Record<string, string> = {
   flowers: "Flowers",
@@ -17,6 +18,32 @@ export const BestSellers = () => {
   const [loading, setLoading] = useState(true);
   const { add } = useCart();
   const navigate = useNavigate();
+
+  // Favorites state — shared with Shop via localStorage
+  const [favorites, setFavorites] = useState<Set<number>>(() => {
+    try {
+      const stored = localStorage.getItem("favorites");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  const toggleFavorite = (e: React.MouseEvent, productId: number) => {
+    e.stopPropagation();
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(productId)) {
+        next.delete(productId);
+        toast("Removed from favorites");
+      } else {
+        next.add(productId);
+        toast("Added to favorites ❤️");
+      }
+      localStorage.setItem("favorites", JSON.stringify([...next]));
+      return next;
+    });
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -65,6 +92,19 @@ export const BestSellers = () => {
                 <Star className="h-3 w-3 fill-white" />
                 #{index + 1}
               </div>
+
+              {/* Favorite button */}
+              <button
+                onClick={(e) => toggleFavorite(e, product.id)}
+                className={`absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition-all duration-200 hover:scale-110 ${
+                  favorites.has(product.id)
+                    ? "bg-red-500 text-white"
+                    : "bg-white/90 text-gray-400 hover:text-red-500"
+                }`}
+                aria-label="Save to favorites"
+              >
+                <Heart className={`h-4 w-4 ${favorites.has(product.id) ? "fill-current" : ""}`} />
+              </button>
 
               {/* Image */}
               <div className="relative aspect-square overflow-hidden bg-gray-100">

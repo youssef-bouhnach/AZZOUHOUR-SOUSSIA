@@ -4,9 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    // Update authenticated user's profile
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $fields = $request->validate([
+            'name'                  => 'sometimes|string|max:255|min:2',
+            'email'                 => 'sometimes|email|unique:users,email,' . $user->id,
+            'password'              => 'sometimes|string|min:8|confirmed',
+        ]);
+
+        if (isset($fields['password'])) {
+            $fields['password'] = Hash::make($fields['password']);
+        }
+
+        $user->update($fields);
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user'    => $user,
+        ]);
+    }
+}
+
     /**
      * Display a listing of the resource.
      */

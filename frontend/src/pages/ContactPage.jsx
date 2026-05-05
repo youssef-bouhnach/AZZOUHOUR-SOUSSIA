@@ -107,7 +107,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                        <p className="text-gray-600">+212 XXX-XXXXXX</p>
+                        <p className="text-gray-600">+212 668-057583</p>
                         <p className="text-sm text-gray-500 mt-1">Mon-Fri from 9am to 6pm</p>
                       </div>
                     </div>
@@ -118,7 +118,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Location</h3>
-                        <p className="text-gray-600">Souss Valley, Morocco</p>
+                        <p className="text-gray-600">Agadir, Morocco</p>
                         <p className="text-sm text-gray-500 mt-1">Visit us by appointment</p>
                       </div>
                     </div>
@@ -128,7 +128,7 @@ const ContactPage = () => {
                   <div className="rounded-2xl overflow-hidden border-2 border-green-100 h-64 bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
                     <div className="text-center text-gray-500">
                       <MapPin className="h-16 w-16 mx-auto mb-4 text-green-600" />
-                      <p className="font-semibold">Souss Valley, Morocco</p>
+                      <p className="font-semibold">Agadir, Morocco</p>
                     </div>
                   </div>
                 </div>

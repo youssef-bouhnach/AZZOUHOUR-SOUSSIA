@@ -18,15 +18,7 @@ export const CartDrawer = () => {
       <SheetContent className="flex w-full flex-col sm:max-w-md p-0">
         {/* Header */}
         <SheetHeader className="px-6 pt-6 pb-4 border-b border-border">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="font-display text-2xl">Shopping Cart</SheetTitle>
-            <button
-              onClick={() => setOpen(false)}
-              className="h-8 w-8 rounded-full hover:bg-muted flex items-center justify-center transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+          <SheetTitle className="font-display text-2xl">Shopping Cart</SheetTitle>
         </SheetHeader>
 
         {/* Empty state */}

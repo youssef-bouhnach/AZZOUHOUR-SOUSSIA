@@ -202,7 +202,6 @@ export const Products = () => {
         promo_price: form.promo_price,
         currency: form.currency,
         image: form.image,
-        category: form.category,
         category_id: form.category_id,
         stock: form.stock,
         status: form.status,

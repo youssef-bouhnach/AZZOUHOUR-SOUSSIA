@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Plus, ShoppingBag, Loader2, Eye } from "lucide-react";
+import { Plus, ShoppingBag, Loader2, Eye, Heart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
@@ -32,6 +32,32 @@ export const Shop = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
+  // Favorites state — persisted in localStorage
+  const [favorites, setFavorites] = useState<Set<number>>(() => {
+    try {
+      const stored = localStorage.getItem("favorites");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  const toggleFavorite = (e: React.MouseEvent, productId: number) => {
+    e.stopPropagation();
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(productId)) {
+        next.delete(productId);
+        toast("Removed from favorites");
+      } else {
+        next.add(productId);
+        toast("Added to favorites ❤️");
+      }
+      localStorage.setItem("favorites", JSON.stringify([...next]));
+      return next;
+    });
+  };
+  
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<string>("all");
@@ -39,12 +65,11 @@ export const Shop = () => {
   const [selectedSize, setSelectedSize] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("default");
 
-  // Read category from URL on mount
+  // Read category AND search from URL on mount
   useEffect(() => {
     const categoryParam = searchParams.get("category");
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
+    if (categoryParam) setSelectedCategory(categoryParam);
+    // search param is read directly below — no state needed
   }, [searchParams]);
 
   // Fetch products from API
@@ -81,8 +106,23 @@ export const Shop = () => {
     services: products.filter((p) => p.category === "services"),
   };
 
+  // Search query from URL
+  const searchQuery = searchParams.get("search")?.trim().toLowerCase() || "";
+
   // Apply filters
   let filteredProducts = [...products];
+
+  // Search filter — matches product name or category label
+  if (searchQuery) {
+    filteredProducts = filteredProducts.filter((p) => {
+      const label = categoryLabels[p.category as Category]?.toLowerCase() ?? p.category?.toLowerCase() ?? "";
+      return (
+        p.name.toLowerCase().includes(searchQuery) ||
+        (p.description ?? "").toLowerCase().includes(searchQuery) ||
+        label.includes(searchQuery)
+      );
+    });
+  }
 
   // Category filter - support both category_id and old category string
   if (selectedCategory !== "all") {
@@ -169,6 +209,19 @@ export const Shop = () => {
         >
           {categoryLabels[p.category as Category]}
         </span>
+        {/* Favorite button */}
+        <button
+          onClick={(e) => toggleFavorite(e, p.id)}
+          className={cn(
+            "absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition-all duration-200 hover:scale-110",
+            favorites.has(p.id)
+              ? "bg-red-500 text-white"
+              : "bg-white/90 text-gray-400 hover:text-red-500"
+          )}
+          aria-label="Save to favorites"
+        >
+          <Heart className={cn("h-4 w-4", favorites.has(p.id) && "fill-current")} />
+        </button>
         {/* View Details Overlay */}
         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 flex items-center justify-center">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg flex items-center gap-2">
@@ -291,6 +344,46 @@ export const Shop = () => {
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+          </div>
+        ) : searchQuery ? (
+          /* ── Search results view ── */
+          <div>
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="font-serif text-3xl font-bold text-gray-900 flex items-center gap-3">
+                  <Search className="h-7 w-7 text-green-600" />
+                  Results for &ldquo;{searchParams.get("search")}&rdquo;
+                </h2>
+                <p className="mt-1 text-gray-500 text-sm">
+                  {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""} found
+                </p>
+              </div>
+              <button
+                onClick={() => navigate("/shop")}
+                className="text-sm text-green-700 hover:text-green-900 underline underline-offset-2 transition-colors"
+              >
+                Clear search
+              </button>
+            </div>
+            {filteredProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-24 bg-gray-50 rounded-3xl border border-gray-100">
+                <ShoppingBag className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+                <p className="text-gray-700 text-xl font-semibold mb-1">No results found</p>
+                <p className="text-gray-500 text-sm mb-6">
+                  Try a different keyword or browse all products
+                </p>
+                <button
+                  onClick={() => navigate("/shop")}
+                  className="px-6 py-2.5 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors font-medium"
+                >
+                  Browse All Products
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {filteredProducts.map((p, i) => renderProduct(p, i))}
+              </div>
+            )}
           </div>
         ) : selectedCategory !== "all" ? (
           /* Single category filtered view */

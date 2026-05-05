@@ -20,8 +20,11 @@ import CategoriesPage from "./pages/CategoriesPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import StoryPage from "./pages/StoryPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
+import FavoritesPage from "./pages/FavoritesPage";
+import AccountPage from "./pages/AccountPage";
 import NotFound from "./pages/NotFound.tsx";
 import LoginPage from "./pages/LoginPage.jsx";
+
 import Register from "./pages/register.jsx";
 
 const queryClient = new QueryClient();
@@ -42,6 +45,8 @@ const App = () => (
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/story" element={<StoryPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/account" element={<AccountPage />} />
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/orders/:id" element={<OrderDetailPage />} />
               <Route path="/login" element={<LoginPage />} />
