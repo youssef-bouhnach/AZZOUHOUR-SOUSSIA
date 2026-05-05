@@ -35,7 +35,8 @@ class StoreProductRequest extends FormRequest
             "color" => "nullable|string|max:50",
             "category_id" => "required|exists:categories,id",
             "origin" => "nullable|string",
-            "is_indoor" => "boolean",
+            "is_indoor" => "nullable|boolean",
+            "image" => "nullable|image|mimes:jpg,jpeg,png,webp|max:2048", // adding image to product
 
             // Variants per product
             "variants" => "nullable|array",

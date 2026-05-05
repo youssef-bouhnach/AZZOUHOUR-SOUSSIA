@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
+use Illuminate\http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::get();
+        $id = $request->query('id');
+
+        $products = Product::when($id, function ($query, $id) {
+            $query->where('category_id', $id);
+        })->get();
+
         return response()->json([
             "products" => $products
         ]);
@@ -34,6 +42,11 @@ class ProductController extends Controller
     {
         // the array that comes from /StoreProductRequest
         $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
 
         // First create product
         $product = Product::create($data);
@@ -106,6 +119,16 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->hasFile('image')) {
+            // delete old image 
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            // store new image
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
         $product->update($data);
 
         if (isset($data['variants'])) {
@@ -130,6 +153,17 @@ class ProductController extends Controller
 
         return response()->json([
             "message" => "product deleted!"
+        ]);
+    }
+
+    /**
+     * product by category
+     */
+    public function byCategory(Category $category)
+    {
+        return response()->json([
+            'category' => $category,
+            'products' => $category->products,
         ]);
     }
 }

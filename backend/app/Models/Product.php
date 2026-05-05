@@ -22,14 +22,17 @@ class Product extends Model
         'category_id',
         'origin',
         'is_indoor',
+        'image',
     ];
 
+    // Relationships
     /**
      CATEGORY
      */
-    public function category(): BelongsTo
+    // app/Models/Product.php
+    public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(\App\Models\Category::class, 'category_id');
     }
     /**
      Plant Details
@@ -72,6 +75,20 @@ class Product extends Model
     public function variants(): HasMany
     {
         return $this->hasMany(Variants::class);
+    }
+    /**
+     Order Items
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    
+
+    // healpers 
+    public function getEffectivePriceAttribute(): string
+    {
+        return $this->promo_price ?? $this->price;
     }
 }
 

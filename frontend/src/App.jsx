@@ -9,6 +9,10 @@ import Register from "./pages/register";
 import Accueil from "./pages/accueil";
 import AdminDashboard from "./pages/adminDashboard";
 import VerifyEmail from "./pages/verifyEmail";
+import Products from "./pages/products";
+import ProductsDetail from "./pages/productsDetail";
+import Categories from "./pages/Categories";
+import CategoriesProducts from "./pages/categoriesProducts";
 
 function App() {
   return (
@@ -35,6 +39,16 @@ function App() {
             }
           />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/products" element={<Products />}></Route>
+          <Route
+            path="/products/detail/:id"
+            element={<ProductsDetail />}
+          ></Route>
+          <Route path="/categories" element={<Categories />}></Route>
+          <Route
+            path="/categories/:slug/products"
+            element={<CategoriesProducts />}
+          />
         </Routes>
       </Router>
     </>

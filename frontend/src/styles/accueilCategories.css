@@ -1,0 +1,97 @@
+/* Container */
+.categories_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.loading {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 50px;
+}
+
+/* Base card style */
+.categories {
+  width: 350px;
+  height: 400px;
+  border-radius: 15px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* align-items: center;
+  justify-content: center;
+  text-align: center; */
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.categories > p {
+    text-shadow: 2px 2px rgb(135, 135, 135);
+    margin: 15px;
+    z-index: 2;
+}
+
+.categories > .categorie_btn {
+    background-color: #ddd;
+    color: black;
+    border-radius: 10px;
+    margin: 15px;
+    align-self: center;
+    z-index: 2;
+}
+/* Hover effect */
+.categories:hover {
+  transform: scale(1.05);
+}
+
+/* Dark overlay for readability */
+.categories::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Text above overlay */
+.categories {
+  z-index: 1;
+}
+
+/* Specific backgrounds */
+.categories_plant {
+  background-image: url('/assets/categories/categorie_plant.jfif');
+}
+
+.categories_flower {
+  background-image: url('/assets/categories/categorie_flower.jfif');
+}
+
+.categories_vase {
+  background-image: url('/assets/categories/categorie_vase.jfif');
+}
+
+.categories_grass {
+  background-image: url('/assets/categories/categorie_grass.jfif');
+}
+
+.categories_service {
+  background-image: url('/assets/categories/categorie_service.jfif');
+}
+
+.categories_soil {
+  background-image: url('/assets/categories/categorie_soil.jfif');
+}

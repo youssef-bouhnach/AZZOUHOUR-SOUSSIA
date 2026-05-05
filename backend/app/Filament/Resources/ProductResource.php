@@ -6,6 +6,7 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -30,10 +31,14 @@ class ProductResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->disk('public')
+                    ->directory('products')
+                    ->visibility('public'),
                 Forms\Components\TextInput::make('price')
                     ->required()
-                    ->numeric()
-                    ->prefix('$'),
+                    ->numeric(),
                 Forms\Components\TextInput::make('promo_price')
                     ->numeric(),
                 Forms\Components\TextInput::make('currency')
@@ -173,14 +178,16 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\ImageColumn::make('image')
+                    // i can use disk('publick') but if i click on the image i want to see it! 
+                    ->url(fn ($record) => 'http://localhost:8000/storage/' . $record->image),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('promo_price')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('currency')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('promo_price')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),

@@ -1,0 +1,31 @@
+User places an order with 2 products:
+                                        
+Product (Plant 1)  ──┐
+                      ├──► OrderItem 1 (qty: 2, unit_price: 45 MAD) ──┐
+Product (Rose)    ──┘                                                  ├──► Order #42
+                      ├──► OrderItem 2 (qty: 1, unit_price: 80 MAD) ──┘         total: 170 MAD
+                                                                                user: Ahmed
+                                                                                status: pending
+
+
+ - The Full Picture:
+Cart (DB)
+    │
+    │  POST /api/orders
+    ▼
+OrderService
+    ├── check stock
+    ├── create Order
+    ├── create OrderItems (snapshot)
+    ├── decrement stock
+    └── clear cart
+         │
+         ▼
+    Order (pending, unpaid)
+         │
+         │  POST /api/payments/initiate
+         ▼
+    CMI Payment
+         │
+         ▼
+    order->markAsPaid()

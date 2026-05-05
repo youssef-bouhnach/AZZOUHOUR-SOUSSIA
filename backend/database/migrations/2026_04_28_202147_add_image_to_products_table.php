@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('grasse_details', function (Blueprint $table) {
-            Schema::rename('grass', 'grass_details');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('image')->nullable();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('grasse_details', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             //
         });
     }

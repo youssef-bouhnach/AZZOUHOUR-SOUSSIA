@@ -39,6 +39,8 @@ class UpdateProductRequest extends FormRequest
             "origin" => "nullable|string",
             "is_indoor" => "boolean",
 
+            "image" => "nullable|image|mimes:jpg,jpeg,png,webp|max:2048", // the updated image  
+
             // Variants per product
             "variants" => "nullable|array",
 

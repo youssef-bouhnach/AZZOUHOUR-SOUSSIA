@@ -1,0 +1,9 @@
+
+.product {
+    display: flex;
+    justify-content: center;
+    gap: 90px;
+    margin-top: 100px;
+    width: 80%;
+}
+

@@ -25,6 +25,10 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->maxLength(255)
+                    ->dehydrated(),
+                Forms\Components\TextInput::make('slug')
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -33,7 +37,11 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
