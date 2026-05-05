@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "../lib/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 import "../styles/login.css";
 
 function Register() {
@@ -13,6 +14,12 @@ function Register() {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setUser } = useAuth();
+
+  // Read ?redirect= so we can send the user back after registration
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get("redirect") || "/accueil";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,21 +30,20 @@ function Register() {
     setErrors({});
 
     try {
-      await axios.get("/sanctum/csrf-cookie");
       const response = await axios.post("/auth/register", formData);
-      console.log("Cookies after csrf:", document.cookie);
-      console.log("User registered:", response.data);
 
-      alert("Verify your email.");
-
-      navigate("/verify-email");
+      // Auto-login after register — store user in context
+      if (response.data.user) {
+        setUser(response.data.user);
+        navigate(redirectTo);
+      } else {
+        // Email verification required
+        navigate("/verify-email");
+      }
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors);
       } else {
-        console.log("Status:", err.response?.status);
-        console.log("Data:", err.response?.data);
-        console.log("Full error:", err);
         alert("Something went wrong: " + err.response?.status);
       }
     }
@@ -103,7 +109,7 @@ function Register() {
         <p style={{ marginTop: "10px" }}>
           Already have an account?{" "}
           <span
-            onClick={() => navigate("/login")}
+            onClick={() => navigate(`/login${location.search}`)}
             style={{ color: "#646cff", cursor: "pointer" }}
           >
             Login

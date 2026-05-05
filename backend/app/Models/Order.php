@@ -22,7 +22,7 @@ class Order extends Model
         'shipping_address',
         'shipping_city',
         'shipping_country',
-        'notes',
+        'note',
     ];
 
     protected $casts = [

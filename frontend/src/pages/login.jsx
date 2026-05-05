@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../lib/axios";
 import { useAuth } from "../context/authContext";
 import "../styles/login.css";
@@ -13,7 +13,12 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useAuth();
+
+  // Read ?redirect= param so we can send the user back after login
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get("redirect") || "/accueil";
 
   const handleChange = (e) => {
     setFormData({
@@ -28,8 +33,6 @@ function Login() {
     setError("");
 
     try {
-      await axios.get("/sanctum/csrf-cookie");
-
       const response = await axios.post("/auth/login", formData);
 
       setUser(response.data.user); // store user in context
@@ -37,7 +40,7 @@ function Login() {
       if (response.data.user.role === "admin") {
         window.location.href = "http://localhost:8000/admin";
       } else {
-        navigate("/accueil");
+        navigate(redirectTo);
       }
 
     } catch (err) {

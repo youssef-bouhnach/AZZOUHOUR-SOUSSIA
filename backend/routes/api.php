@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,10 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category:slug}/products', [ProductController::class, 'byCategory']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Profile
+    Route::get('/profile',  [UserController::class, 'profile']);
+    Route::post('/profile', [UserController::class, 'updateProfile']);
 
     // Cart
     Route::get('/cart',                 [CartController::class, 'index']);

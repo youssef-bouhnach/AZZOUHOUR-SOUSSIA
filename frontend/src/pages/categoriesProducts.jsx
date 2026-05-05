@@ -1,49 +1,62 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "../lib/axios";
+import axios, { STORAGE_URL } from "../config/api";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/footer.jsx";
+import "../styles/productCard.css";
 
 function CategoriesProducts() {
   const { slug } = useParams();
   const [products, setProducts] = useState([]);
-  const [loading, setLoding ] = useState(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8000/api/categorie/${slug}/products`,
-        );
-        const response = res.data.products;
-        setProducts(response);
+        const res = await axios.get(`/api/categories/${slug}/products`);
+        setProducts(res.data.products);
       } catch (error) {
         console.log(error);
       } finally {
-        setLoding(false);
+        setLoading(false);
       }
     };
     fetchProducts();
   }, [slug]);
 
-  if (loading) return <p className="loading">Loading {slug} category ...</p>;
-
   return (
-    <> 
+    <>
       <Navbar />
-      <h1>Category: {slug}</h1>
-      {products.map((p) => (
-        <div key={p.id}>
-          <br />
-          <h1>{p.name}</h1>
-          <h1> {p.description} </h1>
-          <br />
+      <main className="page_content">
+        <div className="category_page_header">
+          <h1>{slug}</h1>
+          <button className="all_products_btn" onClick={() => navigate("/products")}>All Products</button>
         </div>
-      ))}
-      <button onClick={() => navigate('/categories')} style={{backgroundColor: 'lightgreen', padding: '15px', borderRadius: '15px', width: '100px'}} >
-        All Categories
-      </button>
+        {loading ? (
+          <p className="no_products">Loading {slug} products...</p>
+        ) : products.length === 0 ? (
+          <p className="no_products">No products found in this category.</p>
+        ) : (
+          <div className="products_grid">
+            {products.map((product) => (
+              <div key={product.id} className="product_card" onClick={() => navigate(`/products/detail/${product.id}`)}>
+                <img src={`${STORAGE_URL}/${product.image}`} alt={product.name} className="product_card_img" />
+                <div className="product_card_body">
+                  <p className="product_card_name">{product.name}</p>
+                  <p className="product_card_desc">{product.description}</p>
+                  <p className="product_card_price">
+                    {product.promo_price ? (
+                      <><span className="original">{product.price}</span><span className="promo">{product.promo_price} {product.currency}</span></>
+                    ) : (<>{product.price} {product.currency}</>)}
+                  </p>
+                  <button className="product_card_btn" onClick={(e) => { e.stopPropagation(); navigate(`/products/detail/${product.id}`); }}>View Product</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
       <Footer />
     </>
   );

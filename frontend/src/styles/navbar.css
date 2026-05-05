@@ -68,3 +68,261 @@
   padding: 2px 6px;
   border-radius: 50%;
 }
+
+/* ── Shop dropdown ── */
+.nav_dropdown_wrapper {
+  position: relative;
+}
+
+.nav_dropdown_trigger {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.nav_dropdown_trigger:hover {
+  color: #1f4f46;
+}
+
+.nav_chevron {
+  font-size: 12px;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.nav_chevron.open {
+  transform: rotate(180deg);
+}
+
+.nav_dropdown {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  width: 380px;
+  z-index: 500;
+  animation: dropdown_fade 0.15s ease;
+}
+
+@keyframes dropdown_fade {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* "All Products" row at top */
+.nav_dropdown_top {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.nav_all_products {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f4f46;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.nav_all_products:hover {
+  opacity: 0.7;
+}
+
+/* Category grid */
+.nav_category_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.nav_category_item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.nav_category_item:hover {
+  background: #f5f5f5;
+}
+
+.nav_category_img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: #f0f0f0;
+}
+
+.nav_category_img_all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background-color: #e8f5f0;
+}
+
+.nav_category_item span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.nav_category_all span:last-child {
+  color: #1f4f46;
+  font-weight: 600;
+}
+
+.nav_icon_link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ── Profile button ── */
+.nav_profile_btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+/* Avatar circle */
+.nav_avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1f4f46;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav_avatar_lg {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+}
+
+/* Profile dropdown — right-aligned */
+.nav_profile_dropdown {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+  width: 240px !important;
+  animation: dropdown_fade_right 0.15s ease;
+}
+
+@keyframes dropdown_fade_right {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Header with avatar + name/email */
+.nav_profile_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 12px;
+}
+
+.nav_profile_info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nav_profile_name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav_profile_email {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav_profile_divider {
+  border-top: 1px solid #eee;
+  margin: 8px 0;
+}
+
+/* Menu items */
+.nav_profile_item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 9px 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.nav_profile_item:hover {
+  background: #f5f5f5;
+  color: #1f4f46;
+}
+
+.nav_profile_logout {
+  color: #c0392b;
+}
+
+.nav_profile_logout:hover {
+  background: #fff0ee;
+  color: #c0392b;
+}
+
+/* Guest welcome */
+.nav_profile_guest {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px;
+}

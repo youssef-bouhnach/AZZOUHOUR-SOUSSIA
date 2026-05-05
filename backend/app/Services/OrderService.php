@@ -62,7 +62,7 @@ class OrderService
                 'shipping_address' => $shipping['address'],
                 'shipping_city'    => $shipping['city'],
                 'shipping_country' => $shipping['country'] ?? 'MA',
-                'notes'            => $shipping['notes'] ?? null,
+                'note'             => $shipping['notes'] ?? null,
             ]);
 
             // Insert items

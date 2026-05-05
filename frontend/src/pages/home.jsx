@@ -4,7 +4,9 @@ function Home() {
   return (
     <>
       <Navbar />
-      <h1>Home page</h1>
+      <main className="page_content">
+        <h1>Home page</h1>
+      </main>
       <Footer />
     </>
   );
