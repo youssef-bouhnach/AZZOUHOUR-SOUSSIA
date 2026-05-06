@@ -20,7 +20,28 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon  = 'heroicon-o-rectangle-stack';
+    protected static ?int    $navigationSort  = 2;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.products.plural_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.catalogue');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('admin.products.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('admin.products.plural_label');
+    }
 
     public static function form(Form $form): Form
     {
@@ -177,31 +198,41 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(fn () => __('admin.product.name'))
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('image')
-                    // i can use disk('publick') but if i click on the image i want to see it! 
+                    ->label(fn () => __('admin.product.image'))
                     ->url(fn ($record) => 'http://localhost:8000/storage/' . $record->image),
                 Tables\Columns\TextColumn::make('price')
+                    ->label(fn () => __('admin.product.price'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('currency')
+                    ->label(fn () => __('admin.product.currency'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('promo_price')
+                    ->label(fn () => __('admin.product.promo_price'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stock')
+                    ->label(fn () => __('admin.product.stock'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->label(fn () => __('admin.product.status')),
                 Tables\Columns\IconColumn::make('is_featured')
+                    ->label(fn () => __('admin.product.is_featured'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('color')
+                    ->label(fn () => __('admin.product.color'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
-                    ->numeric()
+                    ->label(fn () => __('admin.product.category'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('origin')
+                    ->label(fn () => __('admin.product.origin'))
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_indoor')
+                    ->label(fn () => __('admin.product.is_indoor'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

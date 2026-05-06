@@ -2,26 +2,18 @@
 
 namespace App\Filament\Resources\OrderResource\RelationManagers;
 
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderItemsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'orderItems';
+    protected static string $relationship = 'items';
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('product_name')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+        return $form->schema([]);
     }
 
     public function table(Table $table): Table
@@ -29,22 +21,31 @@ class OrderItemsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('product_name')
             ->columns([
-                Tables\Columns\TextColumn::make('product_name'),
+                Tables\Columns\ImageColumn::make('product_image')
+                    ->label(fn () => __('admin.order_item.image'))
+                    ->circular(),
+
+                Tables\Columns\TextColumn::make('product_name')
+                    ->label(fn () => __('admin.order_item.product')),
+
+                Tables\Columns\TextColumn::make('product_color')
+                    ->label(fn () => __('admin.order_item.color'))
+                    ->badge(),
+
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label(fn () => __('admin.order_item.qty')),
+
+                Tables\Columns\TextColumn::make('unit_price')
+                    ->label(fn () => __('admin.order_item.unit_price'))
+                    ->money('MAD'),
+
+                Tables\Columns\TextColumn::make('subtotal')
+                    ->label(fn () => __('admin.order_item.subtotal'))
+                    ->money('MAD'),
             ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->filters([])
+            ->headerActions([])
+            ->actions([])
+            ->bulkActions([]);
     }
 }

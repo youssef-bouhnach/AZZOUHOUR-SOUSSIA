@@ -17,16 +17,36 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-    protected static ?string $navigationLabel = 'Commandes';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationIcon  = 'heroicon-o-shopping-bag';
+    protected static ?string $navigationGroup = 'Ventes';
+    protected static ?int    $navigationSort  = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.orders.plural_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.ventes');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('admin.orders.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('admin.orders.plural_label');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
 
-                Forms\Components\Section::make('Informations commande')
+                Forms\Components\Section::make(fn () => __('admin.order.section_info'))
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('user_id')
@@ -35,47 +55,56 @@ class OrderResource extends Resource
                             ->required(),
 
                         Forms\Components\Select::make('status')
-                            ->options([
-                                'pending'    => 'En attente',
-                                'paid'       => 'Payé',
-                                'processing' => 'En traitement',
-                                'shipped'    => 'Expédié',
-                                'delivered'  => 'Livré',
-                                'cancelled'  => 'Annulé',
+                            ->options(fn () => [
+                                'pending'    => __('admin.status.pending'),
+                                'paid'       => __('admin.status.paid'),
+                                'processing' => __('admin.status.processing'),
+                                'shipped'    => __('admin.status.shipped'),
+                                'delivered'  => __('admin.status.delivered'),
+                                'cancelled'  => __('admin.status.cancelled'),
                             ])
                             ->required(),
 
                         Forms\Components\Select::make('payment_status')
-                            ->options([
-                                'unpaid'   => 'Non payé',
-                                'paid'     => 'Payé',
-                                'refunded' => 'Remboursé',
+                            ->options(fn () => [
+                                'unpaid'   => __('admin.payment_status.unpaid'),
+                                'paid'     => __('admin.payment_status.paid'),
+                                'refunded' => __('admin.payment_status.refunded'),
                             ])
                             ->required(),
 
                         Forms\Components\TextInput::make('payment_method')
+                            ->label(fn () => __('admin.order.payment_method'))
                             ->placeholder('cmi, cash...'),
 
                         Forms\Components\TextInput::make('subtotal')
+                            ->label(fn () => __('admin.order.subtotal'))
                             ->numeric()->required()->suffix('MAD'),
 
                         Forms\Components\TextInput::make('total')
+                            ->label(fn () => __('admin.order.total'))
                             ->numeric()->required()->suffix('MAD'),
 
                         Forms\Components\TextInput::make('cmi_order_id')
-                            ->label('CMI Order ID'),
+                            ->label(fn () => __('admin.order.cmi_order_id')),
                     ]),
 
-                Forms\Components\Section::make('Livraison')
+                Forms\Components\Section::make(fn () => __('admin.order.section_shipping'))
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('shipping_name')->required(),
-                        Forms\Components\TextInput::make('shipping_phone')->tel(),
+                        Forms\Components\TextInput::make('shipping_name')
+                            ->label(fn () => __('admin.order.shipping_name'))->required(),
+                        Forms\Components\TextInput::make('shipping_phone')
+                            ->label(fn () => __('admin.order.shipping_phone'))->tel(),
                         Forms\Components\TextInput::make('shipping_address')
+                            ->label(fn () => __('admin.order.shipping_address'))
                             ->required()->columnSpanFull(),
-                        Forms\Components\TextInput::make('shipping_city')->required(),
-                        Forms\Components\TextInput::make('shipping_country')->default('MA'),
-                        Forms\Components\Textarea::make('notes')->columnSpanFull(),
+                        Forms\Components\TextInput::make('shipping_city')
+                            ->label(fn () => __('admin.order.shipping_city'))->required(),
+                        Forms\Components\TextInput::make('shipping_country')
+                            ->label(fn () => __('admin.order.shipping_country'))->default('MA'),
+                        Forms\Components\Textarea::make('notes')
+                            ->label(fn () => __('admin.order.notes'))->columnSpanFull(),
                     ]),
             ]);
     }
@@ -85,19 +114,19 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('#')->sortable(),
+                    ->label(fn () => __('admin.order.id'))->sortable(),
 
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('Client')->searchable()->sortable(),
+                    ->label(fn () => __('admin.order.client'))->searchable()->sortable(),
 
                 Tables\Columns\TextColumn::make('shipping_city')
-                    ->label('Ville')->searchable(),
+                    ->label(fn () => __('admin.order.city'))->searchable(),
 
                 Tables\Columns\TextColumn::make('total')
-                    ->label('Total')->money('MAD')->sortable(),
+                    ->label(fn () => __('admin.order.total'))->money('MAD')->sortable(),
 
                 Tables\Columns\BadgeColumn::make('status')
-                    ->label('Statut')
+                    ->label(fn () => __('admin.order.status'))
                     ->colors([
                         'gray'    => 'pending',
                         'success' => 'paid',
@@ -105,53 +134,40 @@ class OrderResource extends Resource
                         'info'    => 'shipped',
                         'danger'  => 'cancelled',
                     ])
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'pending'    => 'En attente',
-                        'paid'       => 'Payé',
-                        'processing' => 'En traitement',
-                        'shipped'    => 'Expédié',
-                        'delivered'  => 'Livré',
-                        'cancelled'  => 'Annulé',
-                        default      => $state,
-                    }),
+                    ->formatStateUsing(fn ($state) => __('admin.status.' . $state, [], app()->getLocale()) ?: $state),
 
                 Tables\Columns\BadgeColumn::make('payment_status')
-                    ->label('Paiement')
+                    ->label(fn () => __('admin.order.payment'))
                     ->colors([
                         'danger'  => 'unpaid',
                         'success' => 'paid',
                         'warning' => 'refunded',
                     ])
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'unpaid'   => 'Non payé',
-                        'paid'     => 'Payé',
-                        'refunded' => 'Remboursé',
-                        default    => $state,
-                    }),
+                    ->formatStateUsing(fn ($state) => __('admin.payment_status.' . $state, [], app()->getLocale()) ?: $state),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Date')->dateTime('d/m/Y H:i')->sortable(),
+                    ->label(fn () => __('admin.order.date'))->dateTime('d/m/Y H:i')->sortable(),
             ])
             ->filters([
-    Tables\Filters\SelectFilter::make('status')
-        ->label('Statut')
-        ->options([
-            'pending'    => 'En attente',
-            'paid'       => 'Payé',
-            'processing' => 'En traitement',
-            'shipped'    => 'Expédié',
-            'delivered'  => 'Livré',
-            'cancelled'  => 'Annulé',
-        ]),
+                Tables\Filters\SelectFilter::make('status')
+                    ->label(fn () => __('admin.order.status'))
+                    ->options(fn () => [
+                        'pending'    => __('admin.status.pending'),
+                        'paid'       => __('admin.status.paid'),
+                        'processing' => __('admin.status.processing'),
+                        'shipped'    => __('admin.status.shipped'),
+                        'delivered'  => __('admin.status.delivered'),
+                        'cancelled'  => __('admin.status.cancelled'),
+                    ]),
 
-    Tables\Filters\SelectFilter::make('payment_status')
-        ->label('Paiement')
-        ->options([
-            'unpaid'   => 'Non payé',
-            'paid'     => 'Payé',
-            'refunded' => 'Remboursé',
-        ]),
-])
+                Tables\Filters\SelectFilter::make('payment_status')
+                    ->label(fn () => __('admin.order.payment'))
+                    ->options(fn () => [
+                        'unpaid'   => __('admin.payment_status.unpaid'),
+                        'paid'     => __('admin.payment_status.paid'),
+                        'refunded' => __('admin.payment_status.refunded'),
+                    ]),
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
