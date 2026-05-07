@@ -13,13 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [
-            EnsureFrontendRequestsAreStateful::class,
-        ]);
+        $middleware->redirectGuestsTo(fn() => 'http://localhost:5173/login');
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
         ]);
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
@@ -27,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'auth/register',
             'auth/login',
-            'auth/logout',
+            'auth/logout'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

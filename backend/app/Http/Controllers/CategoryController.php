@@ -7,70 +7,61 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // Public: get all active categories
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $categories = Category::active()
-            ->withCount('products')
-            ->get();
-
-        return response()->json($categories);
+        return response()->json([
+            'categories' => Category::get() 
+        ]);
     }
 
-    // Public: get single category with products
-    public function show(Category $category)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $category->load(['products' => function ($query) {
-            $query->active()->latest();
-        }]);
-
-        return response()->json($category);
+        //
     }
 
-    // Admin: create category
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $fields = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'slug' => 'nullable|string|unique:categories,slug',
-            'description' => 'nullable|string',
-            'icon' => 'nullable|string',
-            'is_active' => 'boolean',
-        ]);
-
-        $category = Category::create($fields);
-
-        return response()->json($category, 201);
+        //
     }
 
-    // Admin: update category
+    /**
+     * Display the specified resource.
+     */
+    public function show(Category $category)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Category $category)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Category $category)
     {
-        $fields = $request->validate([
-            'name' => 'sometimes|string|max:255|unique:categories,name,' . $category->id,
-            'slug' => 'nullable|string|unique:categories,slug,' . $category->id,
-            'description' => 'nullable|string',
-            'icon' => 'nullable|string',
-            'is_active' => 'boolean',
-        ]);
-
-        $category->update($fields);
-
-        return response()->json($category);
+        //
     }
 
-    // Admin: delete category
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Category $category)
     {
-        // Check if category has products
-        if ($category->products()->count() > 0) {
-            return response()->json([
-                'message' => 'Cannot delete category with products'
-            ], 400);
-        }
-
-        $category->delete();
-
-        return response()->json(['message' => 'Category deleted']);
+        //
     }
 }

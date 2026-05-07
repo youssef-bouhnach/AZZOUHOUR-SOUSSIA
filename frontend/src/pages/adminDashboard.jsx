@@ -1,9 +1,6 @@
-// import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom'
-// import axios from '../lib/axios';
 
 function AdminDashboard() {
-    return(
+    return (
         <>
             <h1>Admin Dashboard</h1>
         </>

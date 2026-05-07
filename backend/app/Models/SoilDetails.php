@@ -2,32 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SoilDetails extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'product_id',
-        'ph',
         'composition',
-        'texture',
-        'drainage',
-        'nutrients',
+        'grass_type',
     ];
 
-    protected $casts = [
-        'ph' => 'decimal:2',
-    ];
-
-    /**
-     * PRODUCT RELATIONSHIP
-     */
-    public function product(): BelongsTo
+    public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 }
+
+
+
+
+
+/** 
+    🔁 product_variants
+        weight (5kg, 10kg…)
+        price
+        stock
+*/

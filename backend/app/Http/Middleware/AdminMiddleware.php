@@ -17,11 +17,10 @@ class AdminMiddleware
     {
         $user = $request->user();
 
-        /** @var \App\Models\User|null $user */
         if(!$user || $user->role !== 'admin') {
             return response()->json([
                 "message" => "unauthorized"
-            ], 403);
+            ], 401);
         }
 
         return $next($request);

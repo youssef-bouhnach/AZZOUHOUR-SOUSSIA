@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,11 +24,18 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user = Auth::user();
+
+        // for auth spa /CSRF 
         $request->session()->regenerate();
+
+        // let's try to generate a token for products 
+        // $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
-            'user' => Auth::user()
+            'user' => $user,
+            // 'token' => $token,
         ]);
     }
 
@@ -36,24 +44,25 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|confirmed'
         ]);
 
-        // ✅ Hash password (VERY IMPORTANT)
+        // Hash password 
         $fields['password'] = Hash::make($fields['password']);
 
-        // ✅ Create user
+        // Create user
         $user = User::create($fields);
 
-        // ✅ Login user after register
-        Auth::login($user);
-
-        // ✅ Regenerate session
+        // Regenerate session
         $request->session()->regenerate();
+
+        /** The verification email */
+        // $user->SendEmailVerificationNotification();
+        event(new Registered($user));
 
         return response()->json([
             'message' => 'User successfully registered',
-            'user' => $user
+            'user' => $user,
         ], 201);
     }
 

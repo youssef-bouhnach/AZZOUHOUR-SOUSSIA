@@ -1,49 +1,76 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
-// ─── Public routes ───────────────────────────────────────────
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{product}', [ProductController::class, 'show']);
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{category}', [CategoryController::class, 'show']);
+Route::get('/test', function () {
+    return response()->json([
+        "message" => "API is working"
+    ]);
+});
 
-// ─── Authenticated user routes ────────────────────────────────
+Route::middleware('auth:sanctum')->get('/user', function (HttpRequest $request) {
+    return $request->user();
+});
+
+Route::middleware('auth:sanctum', 'admin')->group(function() {
+    Route::get('/admin/dashboard', function() {
+        return response()->json([
+            "message" => "admin only"
+        ]);
+    });
+    // more admin pages! 
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user/stats', function () {
+        return response()->json([
+            'products' => \App\Models\Product::count(),
+            'categories' => \App\Models\Category::count(),
+            'users' => \App\Models\User::count(),
+        ]);
+    });
+});
+
+// Admin only — index, show, create, update, delete
+Route::resource('products', ProductController::class);
+
+// get all categories
+Route::get('/categories', [CategoryController::class, 'index']);
+
+// filter products by categorie
+Route::get('/categories/{category:slug}/products', [ProductController::class, 'byCategory']);
+
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Current user
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    // Profile
+    Route::get('/profile',  [UserController::class, 'profile']);
+    Route::post('/profile', [UserController::class, 'updateProfile']);
 
-    // Update profile
-    Route::put('/user/profile', [UserController::class, 'updateProfile']);
+    // Cart
+    Route::get('/cart',                 [CartController::class, 'index']);
+    Route::post('/cart',                [CartController::class, 'store']);
+    Route::patch('/cart/{productId}',   [CartController::class, 'update']);
+    Route::delete('/cart/{productId}',  [CartController::class, 'destroy']);
+    Route::delete('/cart',              [CartController::class, 'clear']);
 
-    // Orders
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/orders', [OrderController::class, 'store']);
-    Route::get('/orders/{order}', [OrderController::class, 'show']);
+    // Orders (ready for next step)
+    Route::post('/orders',              [OrderController::class, 'store']);
+    Route::get('/orders',               [OrderController::class, 'index']);
+    Route::get('/orders/{id}',          [OrderController::class, 'show']);
+
+    // Favorites
+    Route::get('/favorites',            [FavoriteController::class, 'index']);
+    Route::get('/favorites/ids',        [FavoriteController::class, 'ids']);
+    Route::post('/favorites',           [FavoriteController::class, 'store']);
+    Route::delete('/favorites/{productId}', [FavoriteController::class, 'destroy']);
+
 });
 
-// ─── Admin only routes ────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
-    // Product management
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::put('/products/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-
-    // Category management
-    Route::post('/categories', [CategoryController::class, 'store']);
-    Route::put('/categories/{category}', [CategoryController::class, 'update']);
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-
-    // Order management
-    Route::get('/admin/orders', [OrderController::class, 'adminIndex']);
-    Route::patch('/admin/orders/{order}/status', [OrderController::class, 'updateStatus']);
-});
