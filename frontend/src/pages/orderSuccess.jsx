@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "../config/api";
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import Footer from "../components/GreenFooter.jsx";
 import "../styles/orderSuccess.css";
 
 function OrderSuccess() {

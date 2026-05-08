@@ -85,10 +85,10 @@ class ProductResource extends Resource
                 Forms\Components\Toggle::make('is_indoor')
                     ->required(),
 
-                // Plant Details (Category 1)
+                // Plant Details (plant)
                 Forms\Components\Fieldset::make('Plant Details')
                     ->relationship('plantDetails')
-                    ->visible(fn(Get $get) => $get('category_id') == 1)
+                    ->visible(fn(Get $get) => optional(\App\Models\Category::find($get('category_id')))->slug === 'plant')
                     ->schema([
                         Forms\Components\Select::make('sunlight')
                             ->options(['full_sun' => 'Full Sun', 'partial_shade' => 'Partial Shade', 'shade' => 'Shade']),
@@ -100,20 +100,19 @@ class ProductResource extends Resource
                             ->options(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High']),
                     ]),
 
-                // Soil Details (Category 2)
+                // Soil Details
                 Forms\Components\Fieldset::make('Soil Details')
                     ->relationship('soilDetails')
-                    ->visible(fn(Get $get) => $get('category_id') == 2)
+                    ->visible(fn(Get $get) => optional(\App\Models\Category::find($get('category_id')))->slug === 'soil')
                     ->schema([
                         Forms\Components\TextInput::make('composition'),
                         Forms\Components\TextInput::make('grass_type'),
                     ]),
 
-
-                // Vase Details (Category 3)
+                // Vase Details
                 Forms\Components\Fieldset::make('Vase Details')
                     ->relationship('vaseDetails')
-                    ->visible(fn(Get $get) => $get('category_id') == 3)
+                    ->visible(fn(Get $get) => optional(\App\Models\Category::find($get('category_id')))->slug === 'vase')
                     ->schema([
                         Forms\Components\Select::make('material')
                             ->options([
@@ -134,10 +133,10 @@ class ProductResource extends Resource
                             ]),
                     ]),
 
-                // Service Details (Category 4)
+                // Service Details
                 Forms\Components\Fieldset::make('Service Details')
                     ->relationship('serviceDetails')
-                    ->visible(fn(Get $get) => $get('category_id') == 4)
+                    ->visible(fn(Get $get) => optional(\App\Models\Category::find($get('category_id')))->slug === 'service')
                     ->schema([
                         Forms\Components\Select::make('service_type')
                             ->options([
@@ -152,10 +151,11 @@ class ProductResource extends Resource
                             ->options(['indoor' => 'Indoor', 'outdoor' => 'Outdoor', 'both' => 'Both']),
                         Forms\Components\TextInput::make('description'),
                     ]),
-                // Grass Details (Category 6)
+
+                // Grass Details
                 Forms\Components\Fieldset::make('Grass Details')
                     ->relationship('grassDetails')
-                    ->visible(fn(Get $get) => $get('category_id') == 6)
+                    ->visible(fn(Get $get) => optional(\App\Models\Category::find($get('category_id')))->slug === 'grass')
                     ->schema([
                         Forms\Components\Select::make('size')
                             ->options(['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large']),
@@ -202,7 +202,7 @@ class ProductResource extends Resource
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('image')
                     ->label(fn () => __('admin.product.image'))
-                    ->url(fn ($record) => 'http://localhost:8000/storage/' . $record->image),
+                    ->url(fn ($record) => config('app.url') . '/storage/' . $record->image),
                 Tables\Columns\TextColumn::make('price')
                     ->label(fn () => __('admin.product.price'))
                     ->sortable(),

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import axios, { STORAGE_URL } from "../config/api";
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import Footer from "../components/GreenFooter.jsx";
 import "../styles/profile.css";
 
 function Profile() {

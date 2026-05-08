@@ -13,7 +13,8 @@ const ProtectedRoute = ({ children, role }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.email_verified_at) return <Navigate to="/verify-email" />;
+  
+  // if (!user.email_verified_at) return <Navigate to="/verify-email" />;
   
   if (role && user.role !== role) return <Navigate to="/" />;
 

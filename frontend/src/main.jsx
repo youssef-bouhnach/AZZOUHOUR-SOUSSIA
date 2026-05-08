@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { AuthProvider } from "./context/authContext.jsx";
 import { CartProvider } from "./context/cartContext.jsx";
+import { FavoriteProvider } from "./context/favoriteContext.jsx";
 import { initCsrf } from "./config/api.js";
 import "./i18n";
 
@@ -12,7 +13,9 @@ initCsrf().finally(() => {
     <StrictMode>
       <AuthProvider>
         <CartProvider>
-          <App />
+          <FavoriteProvider>
+            <App />
+          </FavoriteProvider>
         </CartProvider>
       </AuthProvider>
     </StrictMode>

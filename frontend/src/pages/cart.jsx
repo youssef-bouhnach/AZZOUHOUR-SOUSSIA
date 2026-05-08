@@ -3,7 +3,7 @@ import { useCart } from "../context/cartContext";
 import { useAuth } from "../context/authContext";
 import { STORAGE_URL } from "../config/api";
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import Footer from "../components/GreenFooter.jsx";
 import "../styles/cart.css";
 
 function Cart() {
@@ -26,7 +26,7 @@ function Cart() {
   return (
     <>
       <Navbar />
-      <main className="page_content">
+      <main className="page_content" style={{height: '100vh'}} >
         <div className="cart_page">
         <h1 className="cart_page_title">Shopping Cart</h1>
 

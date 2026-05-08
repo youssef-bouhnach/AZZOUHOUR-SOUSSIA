@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -18,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (HttpRequest $request) 
     return $request->user();
 });
 
-Route::middleware('auth:sanctum', 'admin')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
     Route::get('/admin/dashboard', function() {
         return response()->json([
             "message" => "admin only"
@@ -63,6 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders',              [OrderController::class, 'store']);
     Route::get('/orders',               [OrderController::class, 'index']);
     Route::get('/orders/{id}',          [OrderController::class, 'show']);
+
+    // Favorites
+    Route::get('/favorites',            [FavoriteController::class, 'index']);
+    Route::get('/favorites/ids',        [FavoriteController::class, 'ids']);
+    Route::post('/favorites',           [FavoriteController::class, 'store']);
+    Route::delete('/favorites/{productId}', [FavoriteController::class, 'destroy']);
 
 });
 

@@ -22,6 +22,7 @@ import Orders from "./pages/orders";
 import Blog from "./pages/blog";
 import Contact from "./pages/contact";
 import About from "./pages/about";
+import Favorites from "./pages/favorites";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </Router>
     </>

@@ -19,7 +19,7 @@ function Register() {
 
   // Read ?redirect= so we can send the user back after registration
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirect") || "/accueil";
+  const redirectTo = params.get("redirect") || "/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -11,11 +11,12 @@ class CategoryProductDetailVariantsSeeder extends Seeder
     public function run(): void
     {
         // Categories
-        $trees = Category::create(['name' => 'Trees']);
-        $soil = Category::create(['name' => 'Soil']);
-        $vases = Category::create(['name' => 'Vases']);
-        $services = Category::create(['name' => 'Services']);
-        $flowers = Category::create(['name' => 'Flowers']);
+        $trees    = Category::create(['name' => 'Trees',    'slug' => 'trees']);
+        $soil     = Category::create(['name' => 'Soil',     'slug' => 'soil']);
+        $vases    = Category::create(['name' => 'Vases',    'slug' => 'vases']);
+        $services = Category::create(['name' => 'Services', 'slug' => 'services']);
+        $flowers  = Category::create(['name' => 'Flowers',  'slug' => 'flowers']);
+        $grass    = Category::create(['name' => 'Grass',    'slug' => 'grass']);
 
         // 🌳 TREE PRODUCT
         $tree = Product::create([

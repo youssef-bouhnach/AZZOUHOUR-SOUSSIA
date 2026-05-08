@@ -1,91 +1,103 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../lib/axios.js";
-import { useAuth } from "../context/authContext";
-import "../styles/accueilCategories.css";
-
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import GreenFooter from "../components/GreenFooter.jsx";
+import BestSellers from "../components/BestSellers.jsx";
+import ShopCollections from "../components/ShopCollections.jsx";
+import OurStory from "../components/OurStory.jsx";
+import PlantJourney from "../components/PlantJourney.jsx";
+import "../styles/accueil.css";
 
-function Accueil({ children, role }) {
-  const { user, logout, loading } = useAuth();
+const stats = [
+  { value: "12k+", label: "Gardens grown" },
+  { value: "98%",  label: "Plants thrive"  },
+  { value: "7-day", label: "Healthy guarantee" },
+];
+
+function Accueil() {
   const navigate = useNavigate();
-
-  const logOut = async () => {
-    await logout();
-    navigate("/login");
-  };
-
-  const to_products_plants = () => {
-    navigate('/products');
-  }
 
   return (
     <>
       <Navbar />
-      <h1>Accueil</h1>
-      <button
-        style={{
-          padding: "15px",
-          backgroundColor: "lightgreen",
-          color: "white",
-          borderRadius: "5%",
-          maxWidth: "100px",
-          marginBottom: "50px",
-        }}
-        onClick={() => navigate("/products")}
-      >
-        Shop
-      </button>
-      <br />
-      <div className="categories_container">
-        <div className="categories categories_plant">
-          <p>Arbres et arbres fruitiers</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/plant/products')} >Shop</button>
+
+      {/* ── Hero ── */}
+      <section className="hero">
+        {/* background image via CSS */}
+        <div className="hero_overlay" />
+
+        {/* Decorative floating icons */}
+        <div className="hero_decor" aria-hidden="true">
+          <div className="hero_orb hero_orb_1" />
+          <div className="hero_orb hero_orb_2" />
         </div>
 
-        <div className="categories categories_flower">
-          <p>Fleurs</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/flower/products')} >Shop</button>
+        <div className="hero_content">
+          {/* Badge */}
+          <span className="hero_badge">
+            <span className="hero_badge_dot" />
+            Rooted since 2009
+          </span>
+
+          {/* Headline */}
+          <h1 className="hero_title">
+            Grow a garden that{" "}
+            <em className="hero_accent">breathes</em>.
+          </h1>
+
+          {/* Sub */}
+          <p className="hero_sub">
+            Heirloom trees, wild flowers, lush turf, and living soil — delivered to
+            your door, planted by hands that know.
+          </p>
+
+          {/* CTAs */}
+          <div className="hero_ctas">
+            <button
+              className="hero_btn_primary"
+              onClick={() => navigate("/products")}
+            >
+              Shop the nursery →
+            </button>
+            <button
+              className="hero_btn_outline"
+              onClick={() => navigate("/categories/service/products")}
+            >
+              Explore services
+            </button>
+          </div>
+
+          {/* Stats */}
+          <dl className="hero_stats">
+            {stats.map(({ value, label }) => (
+              <div key={label} className="hero_stat">
+                <dt className="hero_stat_value">{value}</dt>
+                <dd className="hero_stat_label">{label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        <div className="categories categories_vase">
-          <p>Vase</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/vase/products')} >Shop</button>
+        {/* Bottom wave */}
+        <div className="hero_wave" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0 64 C360 0 1080 0 1440 64 L1440 64 L0 64 Z" fill="#f5f0e8" />
+          </svg>
         </div>
+      </section>
 
-        <div className="categories categories_grass">
-          <p>Gazon Naturel / Artificiel</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/grass/products')} >Shop</button>
-        </div>
+      {/* ── Best Sellers ── */}
+      <BestSellers />
 
-        <div className="categories categories_service">
-          <p>Notre service</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/service/products')} >Shop</button>
-        </div>
+      {/* ── Shop Collections ── */}
+      <ShopCollections />
 
-        <div className="categories categories_soil">
-          <p>Soil</p>
-          <button className="categorie_btn" onClick={() => navigate('/categories/soil/products')} >Shop</button>
-        </div>
-      </div>
-      <br />
-      <button
-        style={{
-          padding: "15px",
-          backgroundColor: "red",
-          color: "white",
-          borderRadius: "5%",
-          maxWidth: "100px",
-          marginBottom: "50px",
-        }}
-        type="submit"
-        onClick={logOut}
-        disabled={loading}
-      >
-        {loading ? "logging out..." : "Log Out"}
-      </button>
-      <Footer />
+      {/* ── Our Story ── */}
+      <OurStory />
+
+      {/* ── Plant Journey ── */}
+      <PlantJourney />
+
+      <GreenFooter />
     </>
   );
 }

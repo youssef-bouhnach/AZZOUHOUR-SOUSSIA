@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -53,16 +52,28 @@ class CartController extends Controller
             ], 422);
         }
 
-        // updateOrCreate handles both "add new" and "already in cart"
-        $item = CartItem::updateOrCreate(
-            [
+        // If item already exists → increment quantity, otherwise create it
+        $item = CartItem::where('user_id', $request->user()->id)
+            ->where('product_id', $request->product_id)
+            ->first();
+
+        if ($item) {
+            $newQty = $item->quantity + $quantity;
+
+            if ($product->stock < $newQty) {
+                return response()->json([
+                    'message' => 'Stock insuffisant'
+                ], 422);
+            }
+
+            $item->update(['quantity' => $newQty]);
+        } else {
+            $item = CartItem::create([
                 'user_id'    => $request->user()->id,
                 'product_id' => $request->product_id,
-            ],
-            [
-                'quantity' => DB::raw("quantity + {$quantity}"),
-            ]
-        );
+                'quantity'   => $quantity,
+            ]);
+        }
 
         return response()->json([
             'message' => 'Produit ajouté au panier',

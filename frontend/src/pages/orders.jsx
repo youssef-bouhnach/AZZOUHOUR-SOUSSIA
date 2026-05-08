@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../config/api";
 import { useAuth } from "../context/authContext";
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import Footer from "../components/GreenFooter.jsx";
 import "../styles/orders.css";
 
 const STATUS_COLORS = {

@@ -4,7 +4,7 @@ import { useCart } from "../context/cartContext";
 import { useAuth } from "../context/authContext";
 import axios from "../lib/axios";
 import Navbar from "../components/navbar.jsx";
-import Footer from "../components/footer.jsx";
+import Footer from "../components/GreenFooter.jsx";
 import "../styles/checkout.css";
 
 function Checkout() {
