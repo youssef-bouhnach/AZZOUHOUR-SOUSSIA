@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (HttpRequest $request) 
     return $request->user();
 });
 
-Route::middleware('auth:sanctum', 'admin')->group(function() {
+Route::middleware('auth:sanctum')->group(function() {
     Route::get('/admin/dashboard', function() {
         return response()->json([
             "message" => "admin only"
