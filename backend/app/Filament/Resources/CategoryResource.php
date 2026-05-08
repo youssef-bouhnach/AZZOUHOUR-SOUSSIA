@@ -17,13 +17,38 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon  = 'heroicon-o-rectangle-stack';
+    protected static ?int    $navigationSort  = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.categories.plural_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.catalogue');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('admin.categories.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('admin.categories.plural_label');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255)
+                    ->dehydrated(),
+                Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -33,7 +58,13 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(fn () => __('admin.category.name'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->label(fn () => __('admin.category.slug'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

@@ -1,0 +1,140 @@
+.success_page {
+  max-width: 700px;
+  margin: 48px auto;
+  padding: 0 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* "Thank you" line */
+.success_thank_you {
+  font-size: 15px;
+  color: #333;
+  margin: 0;
+}
+
+.success_loading {
+  color: #999;
+  font-size: 14px;
+}
+
+/* Dashed summary box */
+.success_summary_box {
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.success_summary_box p {
+  font-size: 14px;
+  color: #444;
+  margin: 0;
+}
+
+.success_summary_box span {
+  color: #666;
+}
+
+.success_summary_box strong {
+  color: #111;
+}
+
+/* Payment note */
+.success_payment_note {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* Order details title */
+.success_details_title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f4f46;
+  margin: 0;
+}
+
+/* Items table */
+.success_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.success_table thead tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.success_table th {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 8px 0;
+  text-align: left;
+}
+
+.success_table th:last-child,
+.success_table td:last-child {
+  text-align: right;
+}
+
+.success_table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.success_table td {
+  padding: 14px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.success_item_qty {
+  font-weight: 700;
+  color: #1f4f46;
+}
+
+/* Totals breakdown */
+.success_totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid #eee;
+}
+
+.success_totals_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #444;
+  border-bottom: 1px solid #eee;
+}
+
+.success_totals_total {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f4f46;
+}
+
+/* Continue button */
+.success_continue_btn {
+  align-self: flex-start;
+  padding: 12px 28px;
+  background: #1f4f46;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.success_continue_btn:hover {
+  background: #163d36;
+}

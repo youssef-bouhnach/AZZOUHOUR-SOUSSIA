@@ -17,7 +17,28 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon  = 'heroicon-o-rectangle-stack';
+    protected static ?int    $navigationSort  = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('admin.users.plural_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.utilisateurs');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('admin.users.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('admin.users.plural_label');
+    }
 
     public static function form(Form $form): Form
     {
@@ -47,10 +68,13 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(fn () => __('admin.user.name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label(fn () => __('admin.user.email'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
+                    ->label(fn () => __('admin.user.verified'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -62,6 +86,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('role')
+                    ->label(fn () => __('admin.user.role'))
                     ->searchable(),
             ])
             ->filters([

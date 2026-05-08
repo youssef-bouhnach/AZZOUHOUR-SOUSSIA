@@ -1,0 +1,129 @@
+/* ── Category Card — horizontal 50/50 layout ── */
+.ccat_grid {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.ccat_card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  background: #fff;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+  min-height: 220px;
+}
+
+.ccat_card_visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ccat_card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+}
+
+/* Left — image */
+.ccat_card_img_wrap {
+  position: relative;
+  width: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ccat_card_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.ccat_card:hover .ccat_card_img {
+  transform: scale(1.05);
+}
+
+.ccat_card_img_overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.18), transparent);
+  pointer-events: none;
+}
+
+.ccat_card_icon {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 1.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Right — text */
+.ccat_card_body {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 2.5rem;
+  gap: 0.75rem;
+}
+
+.ccat_card_title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a2e1a;
+  margin: 0;
+}
+
+.ccat_card_desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ccat_card_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.ccat_card_arrow {
+  transition: transform 0.2s ease;
+}
+
+.ccat_card:hover .ccat_card_arrow {
+  transform: translateX(4px);
+}
+
+/* ── Responsive: stack vertically on small screens ── */
+@media (max-width: 640px) {
+  .ccat_card {
+    flex-direction: column;
+    min-height: unset;
+  }
+
+  .ccat_card_img_wrap,
+  .ccat_card_body {
+    width: 100%;
+  }
+
+  .ccat_card_img_wrap {
+    height: 200px;
+  }
+
+  .ccat_card_body {
+    padding: 1.25rem 1.5rem;
+  }
+}

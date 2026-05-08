@@ -9,10 +9,11 @@ class Category extends Model
 {
     protected $fillable = [
         'name',
+        'slug'
     ];
 
-    public function produit (): HasMany
+    public function products()
     {
-        return $this->HasMany(Product::class);
+        return $this->hasMany(\App\Models\Product::class, 'category_id');
     }
 }

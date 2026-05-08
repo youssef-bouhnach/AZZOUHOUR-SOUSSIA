@@ -1,0 +1,103 @@
+/* ══════════════════════════════════════
+   PLANT JOURNEY SECTION
+══════════════════════════════════════ */
+.pj_section {
+  background: #ffffff;
+  padding: 5rem 0 5.5rem;
+}
+
+.pj_container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── Header ── */
+.pj_header {
+  margin-bottom: 3.5rem;
+  max-width: 640px;
+}
+
+.pj_title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #1a3a1a;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.pj_title_em {
+  font-style: italic;
+  font-weight: 700;
+  color: #1a3a1a;
+}
+
+.pj_subtitle {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #4b5563;
+  margin: 0;
+}
+
+/* ── 3-column steps ── */
+.pj_steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+/* ── Single step ── */
+.pj_step {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Icon */
+.pj_icon_wrap {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+.pj_icon_svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Step title */
+.pj_step_title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a3a1a;
+  margin: 0 0 0.65rem;
+}
+
+/* Step description */
+.pj_step_desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .pj_steps {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .pj_title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pj_steps {
+    gap: 2rem;
+  }
+}

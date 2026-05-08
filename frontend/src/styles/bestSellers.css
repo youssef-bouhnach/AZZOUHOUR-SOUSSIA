@@ -1,0 +1,141 @@
+/* ══════════════════════════════════════
+   BEST SELLERS SECTION
+══════════════════════════════════════ */
+.bs_section {
+  background: #ffffff;
+  padding: 4rem 0 5rem;
+}
+
+.bs_container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── Header row ── */
+.bs_header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.bs_title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a3a1a;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.bs_view_all {
+  background: none;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1a3a1a;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.bs_view_all:hover {
+  opacity: 0.6;
+}
+
+/* ── Product grid ── */
+.bs_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+/* ── Product card ── */
+.bs_card {
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.bs_card:hover {
+  transform: translateY(-4px);
+}
+
+.bs_card_img_wrap {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.bs_card_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.bs_card:hover .bs_card_img {
+  transform: scale(1.05);
+}
+
+.bs_card_body {
+  padding: 0.75rem 0 0;
+}
+
+.bs_card_name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a3a1a;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bs_card_price {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── Skeleton loader ── */
+.bs_skeleton {
+  aspect-ratio: 3 / 4;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .bs_grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bs_section {
+    padding: 2.5rem 0 3rem;
+  }
+
+  .bs_title {
+    font-size: 1.5rem;
+  }
+
+  .bs_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}

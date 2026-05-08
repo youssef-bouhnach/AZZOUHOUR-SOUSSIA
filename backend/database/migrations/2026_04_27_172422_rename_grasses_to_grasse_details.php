@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('grasse_details', function (Blueprint $table) {
-            Schema::rename('grasses', 'grass_details');
+            Schema::rename('grass', 'grass_details');
         });
     }
 
