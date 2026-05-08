@@ -27,7 +27,7 @@ function Navbar() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (shopRef.current && !shopRef.current.contains(e.target))       setShopOpen(false);
+      if (shopRef.current    && !shopRef.current.contains(e.target))    setShopOpen(false);
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -53,139 +53,253 @@ function Navbar() {
       </div>
 
       {/* Main navbar */}
-      <nav className="navbar">
-        {/* Logo */}
-        <div className="logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-          <span>🌿</span> blooms co.
-        </div>
+      <header className={`navbar ${scrolled ? "navbar_scrolled" : ""}`}>
+        <div className="navbar_inner">
 
-        {/* Links */}
-        <ul className="nav_links">
-          <li><Link to="/">Home</Link></li>
+          {/* Logo */}
+          <Link to="/" className="navbar_logo">
+            <span className="navbar_logo_icon">
+              <Leaf size={16} />
+            </span>
+            AZZOUHOUR-SOUSSIA
+          </Link>
 
-          {/* ── Shop dropdown ── */}
-          <li className="nav_dropdown_wrapper" ref={shopRef}>
-            <button
-              className="nav_dropdown_trigger"
-              onClick={() => { setShopOpen((o) => !o); setProfileOpen(false); }}
-            >
-              Shop <span className={`nav_chevron ${shopOpen ? "open" : ""}`}>▾</span>
-            </button>
-
-            {shopOpen && (
-              <div className="nav_dropdown">
-                <div className="nav_dropdown_top">
-                  <button
-                    className="nav_all_products"
-                    onClick={() => { navigate("/products"); setShopOpen(false); }}
-                  >
-                    All Products →
-                  </button>
-                </div>
-                <div className="nav_category_grid">
-                  {categories.map((cat) => (
+          {/* Desktop nav links — hidden when search open */}
+          <nav className={`navbar_links ${searchOpen ? "navbar_links_hidden" : ""}`}>
+            {/* Shop dropdown */}
+            <div className="nav_dropdown_wrapper" ref={shopRef}>
+              <button
+                className="navbar_link_btn"
+                onClick={() => { setShopOpen((o) => !o); setProfileOpen(false); }}
+              >
+                Shop
+              </button>
+              {shopOpen && (
+                <div className="nav_dropdown">
+                  <div className="nav_dropdown_top">
                     <button
-                      key={cat.id}
-                      className="nav_category_item"
-                      onClick={() => { navigate(`/categories/${cat.slug}/products`); setShopOpen(false); }}
+                      className="nav_all_products"
+                      onClick={() => { navigate("/products"); setShopOpen(false); }}
                     >
-                      <div
-                        className="nav_category_img"
-                        style={{ backgroundImage: `url(/assets/categories/categorie_${cat.slug}.jfif)` }}
-                      />
-                      <span>{cat.name}</span>
+                      All Products →
                     </button>
-                  ))}
-                  <button
-                    className="nav_category_item nav_category_all"
-                    onClick={() => { navigate("/categories"); setShopOpen(false); }}
-                  >
-                    <div className="nav_category_img nav_category_img_all"><span>🌿</span></div>
-                    <span>All Categories</span>
-                  </button>
+                  </div>
+                  <div className="nav_category_grid">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        className="nav_category_item"
+                        onClick={() => { navigate(`/categories/${cat.slug}/products`); setShopOpen(false); }}
+                      >
+                        <div
+                          className="nav_category_img"
+                          style={{ backgroundImage: `url(/assets/categories/categorie_${cat.slug}.jfif)` }}
+                        />
+                        <span>{cat.name}</span>
+                      </button>
+                    ))}
+                    <button
+                      className="nav_category_item nav_category_all"
+                      onClick={() => { navigate("/categories"); setShopOpen(false); }}
+                    >
+                      <div className="nav_category_img nav_category_img_all"><span>🌿</span></div>
+                      <span>All Categories</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </li>
+              )}
+            </div>
 
-          <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
-        </ul>
+            <Link to="/categories" className="navbar_link">Categories</Link>
+            <Link to="/about"      className="navbar_link">Our Story</Link>
+            <Link to="/contact"    className="navbar_link">Contact</Link>
 
-        {/* Icons */}
-        <div className="nav_icons">
-          <span>🔍</span>
-
-          {/* ── Profile dropdown ── */}
-          <div className="nav_dropdown_wrapper" ref={profileRef}>
+            {/* Search trigger */}
             <button
-              className="nav_profile_btn"
-              onClick={() => { setProfileOpen((o) => !o); setShopOpen(false); }}
-              title={user ? user.name : "Account"}
+              className="navbar_search_trigger"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
             >
-              {user ? (
-                <div className="nav_avatar">{initials}</div>
-              ) : (
-                <span>👤</span>
+              <Search size={14} />
+              <span>Search</span>
+            </button>
+          </nav>
+
+          {/* Expanding search bar */}
+          <div className={`navbar_search_bar ${searchOpen ? "navbar_search_bar_open" : ""}`}>
+            <form onSubmit={handleSearch} className="navbar_search_form">
+              <Search size={16} className="navbar_search_icon" />
+              <input
+                ref={searchRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="navbar_search_input"
+              />
+              {searchQuery && (
+                <button type="button" onClick={() => setSearchQuery("")} className="navbar_search_clear">
+                  <X size={14} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="navbar_search_esc"
+              >
+                Esc
+              </button>
+            </form>
+          </div>
+
+          {/* Right icons */}
+          <div className="navbar_actions">
+            {/* User / profile */}
+            <div className="nav_dropdown_wrapper" ref={profileRef}>
+              <button
+                className="navbar_icon_btn"
+                onClick={() => { setProfileOpen((o) => !o); setShopOpen(false); }}
+                title={user ? user.name : "Account"}
+              >
+                {user ? (
+                  <span className="nav_avatar">{initials}</span>
+                ) : (
+                  <>
+                    <User size={18} />
+                    <span className="navbar_icon_label">Login</span>
+                  </>
+                )}
+              </button>
+
+              {profileOpen && (
+                <div className="nav_dropdown nav_profile_dropdown">
+                  {user ? (
+                    <>
+                      <div className="nav_profile_header">
+                        <div className="nav_avatar nav_avatar_lg">{initials}</div>
+                        <div className="nav_profile_info">
+                          <p className="nav_profile_name">{user.name}</p>
+                          <p className="nav_profile_email">{user.email}</p>
+                        </div>
+                      </div>
+                      <div className="nav_profile_divider" />
+                      {user.role === "admin" && (
+                        <button className="nav_profile_item" onClick={() => { navigate("/admin/dashboard"); setProfileOpen(false); }}>
+                          <Settings size={15} /> Admin Panel
+                        </button>
+                      )}
+                      <button className="nav_profile_item" onClick={() => { navigate("/profile"); setProfileOpen(false); }}>
+                        <User size={15} /> My Account
+                      </button>
+                      <button className="nav_profile_item" onClick={() => { navigate("/orders"); setProfileOpen(false); }}>
+                        <Package size={15} /> My Orders
+                      </button>
+                      <div className="nav_profile_divider" />
+                      <button className="nav_profile_item nav_profile_logout" onClick={handleLogout}>
+                        <LogOut size={15} /> Log out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="nav_profile_guest">Welcome!</p>
+                      <button className="nav_profile_item" onClick={() => { navigate("/login"); setProfileOpen(false); }}>
+                        🔑 Log in
+                      </button>
+                      <button className="nav_profile_item" onClick={() => { navigate("/register"); setProfileOpen(false); }}>
+                        ✏️ Create account
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Favorites */}
+            <button
+              className="navbar_icon_btn navbar_fav_btn"
+              onClick={() => navigate("/favorites")}
+              aria-label={`Favorites, ${favCount} items`}
+            >
+              <Heart size={18} className={favCount > 0 ? "navbar_fav_active" : ""} />
+              {favCount > 0 && (
+                <span className="navbar_badge navbar_badge_red">{favCount}</span>
               )}
             </button>
 
-            {profileOpen && (
-              <div className="nav_dropdown nav_profile_dropdown">
-                {user ? (
-                  <>
-                    {/* User info header */}
-                    <div className="nav_profile_header">
-                      <div className="nav_avatar nav_avatar_lg">{initials}</div>
-                      <div className="nav_profile_info">
-                        <p className="nav_profile_name">{user.name}</p>
-                        <p className="nav_profile_email">{user.email}</p>
-                      </div>
-                    </div>
+            {/* Cart */}
+            <button
+              className="navbar_cart_btn"
+              onClick={openCart}
+              aria-label={`Cart, ${count} items`}
+            >
+              <ShoppingBag size={16} />
+              <span>Cart</span>
+              <span className={`navbar_badge ${count > 0 ? "navbar_badge_accent" : "navbar_badge_primary"}`}>
+                {count}
+              </span>
+            </button>
 
-                    <div className="nav_profile_divider" />
-
-                    {/* Menu items */}
-                    <button className="nav_profile_item" onClick={() => { navigate("/profile"); setProfileOpen(false); }}>
-                      👤 My Account
-                    </button>
-                    <button className="nav_profile_item" onClick={() => { navigate("/orders"); setProfileOpen(false); }}>
-                      📦 My Orders
-                    </button>
-                    <button className="nav_profile_item" onClick={() => { navigate("/cart"); setProfileOpen(false); }}>
-                      🛒 My Cart
-                    </button>
-
-                    <div className="nav_profile_divider" />
-
-                    <button className="nav_profile_item nav_profile_logout" onClick={handleLogout}>
-                      � Log out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {/* Guest */}
-                    <p className="nav_profile_guest">Welcome!</p>
-                    <button className="nav_profile_item" onClick={() => { navigate("/login"); setProfileOpen(false); }}>
-                      🔑 Log in
-                    </button>
-                    <button className="nav_profile_item" onClick={() => { navigate("/register"); setProfileOpen(false); }}>
-                      ✏️ Create account
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
+            {/* Mobile hamburger */}
+            <button
+              className="navbar_hamburger"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
-
-          {/* Cart icon */}
-          <span className="cart" onClick={openCart} style={{ cursor: "pointer" }}>
-            🛒
-            {count > 0 && <span className="cart_badge">{count}</span>}
-          </span>
         </div>
-      </nav>
+
+        {/* Mobile search bar */}
+        {searchOpen && (
+          <div className="navbar_mobile_search">
+            <form onSubmit={handleSearch} className="navbar_search_form">
+              <Search size={16} className="navbar_search_icon" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="navbar_search_input"
+              />
+              {searchQuery && (
+                <button type="button" onClick={() => setSearchQuery("")} className="navbar_search_clear">
+                  <X size={14} />
+                </button>
+              )}
+            </form>
+          </div>
+        )}
+      </header>
+
+      {/* Mobile nav drawer */}
+      {mobileOpen && (
+        <div className="navbar_mobile_drawer">
+          <div className="navbar_mobile_backdrop" onClick={() => setMobileOpen(false)} />
+          <nav className="navbar_mobile_panel">
+            <ul className="navbar_mobile_list">
+              {[
+                { to: "/products",   label: "Shop"       },
+                { to: "/categories", label: "Categories" },
+                { to: "/about",      label: "Our Story"  },
+                { to: "/contact",    label: "Contact"    },
+                { to: "/favorites",  label: "Favorites"  },
+              ].map(({ to, label }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="navbar_mobile_link"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span className="navbar_mobile_dot" />
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
     </>
   );
 }
