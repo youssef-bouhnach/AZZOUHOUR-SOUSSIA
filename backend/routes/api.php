@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 // Delivery Man routes
 Route::middleware(['auth:sanctum', 'deliverymanMIDD:deliveryman'])->group(function() {
+    Route::get('/delivery/dashboard', [DeliveryManController::class, 'dashboard']);
     Route::get('/delivery/orders', [DeliveryManController::class, 'myOrders']);
     Route::patch('/delivery/orders/{order}/status', [DeliveryManController::class, 'updateOrder']);
     Route::get('/delivery/profile', [DeliveryManController::class, 'profile']);

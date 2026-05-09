@@ -24,7 +24,10 @@ import Contact from "./pages/contact";
 import About from "./pages/about";
 import Favorites from "./pages/favorites";
 import DeliveryDashboard from "./pages/DeliveryDashboard";
+import DeliveryOrders from "./pages/DeliveryOrders";
+import DeliveryOrderDetail from "./pages/DeliveryOrderDetail";
 import UnauthorizedPage from "./pages/aunothorized";
+import { DeliveryProvider } from "./context/deliveryContext";
 
 function App() {
   return (
@@ -62,10 +65,32 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route
+            path="/delivery/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["deliveryman"]}>
+                <DeliveryProvider>
+                  <DeliveryDashboard />
+                </DeliveryProvider>
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/delivery/orders"
             element={
               <ProtectedRoute allowedRoles={["deliveryman"]}>
-                <DeliveryDashboard />
+                <DeliveryProvider>
+                  <DeliveryOrders />
+                </DeliveryProvider>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/delivery/orders/:orderId/status"
+            element={
+              <ProtectedRoute allowedRoles={["deliveryman"]}>
+                <DeliveryProvider>
+                  <DeliveryOrderDetail />
+                </DeliveryProvider>
               </ProtectedRoute>
             }
           />

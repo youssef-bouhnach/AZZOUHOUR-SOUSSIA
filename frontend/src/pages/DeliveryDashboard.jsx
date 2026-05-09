@@ -1,144 +1,118 @@
-import { useEffect, useState } from "react";
-import { getMyOrders, updateOrder } from "../config/api";
+import { useEffect } from "react";
+import { useDelivery } from "../context/deliveryContext";
+import DeliveryLayout from "../components/DeliveryLayout";
+import "../styles/delivery.css";
 
 export default function DeliveryDashboard() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { stats, statsLoading, fetchStats } = useDelivery();
 
   useEffect(() => {
-    fetchOrders();
+    fetchStats();
   }, []);
 
-  async function fetchOrders() {
-    try {
-      const res = await getMyOrders();
-      setOrders(res.data.orders);
-    } catch (err) {
-      setError("Failed to load orders.");
-      console.log("err", err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleAction(orderId, action) {
-    if (!confirm(`Mark this order as ${action}?`)) return;
-    try {
-      await updateOrder(orderId, action);
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === orderId
-            ? {
-                ...o,
-                status: action === "delivered" ? "delivered" : "canceled",
-                payment_status:
-                  action === "delivered"
-                    ? "collected_by_deliveryman"
-                    : "unpaid",
-              }
-            : o,
-        ),
-      );
-    } catch (e) {
-      alert(e.response?.data?.message || "Something went wrong.");
-    }
-  }
-
-  if (loading) return <p>Loading orders...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">My Assigned Orders</h1>
+    <DeliveryLayout>
+      <div className="delivery-page-header">
+        <h1 className="delivery-page-title">Dashboard</h1>
+        <p className="delivery-page-subtitle">Overview of your delivery activity</p>
+      </div>
 
-      {orders.length === 0 ? (
-        <p className="text-gray-500">No orders assigned yet.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-3">#</th>
-                <th className="p-3">Client</th>
-                <th className="p-3">Ville</th>
-                <th className="p-3">Total</th>
-                <th className="p-3">Statut</th>
-                <th className="p-3">Paiement</th>
-                <th className="p-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{order.id}</td>
-                  <td className="p-3">{order.user?.name}</td>
-                  <td className="p-3">{order.shipping_city}</td>
-                  <td className="p-3">{order.total} MAD</td>
-                  <td className="p-3">
-                    <StatusBadge status={order.status} />
-                  </td>
-                  <td className="p-3">
-                    <PaymentBadge status={order.payment_status} />
-                  </td>
-                  <td className="p-3 space-x-2">
-                    {order.status === "assigned" ||
-                    order.status === "in_progress" ? (
-                      <>
-                        <button
-                          onClick={() => handleAction(order.id, "delivered")}
-                          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                        >
-                          Livré ✓
-                        </button>
-                        <button
-                          onClick={() => handleAction(order.id, "canceled")}
-                          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                        >
-                          Annuler ✗
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-gray-400 italic">Clôturé</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {statsLoading && <div className="delivery-loading">Loading…</div>}
+      {!statsLoading && stats && (
+        <>
+          {/* Stats */}
+          <div className="delivery-stats-grid">
+            <StatCard
+              label="Delivered"
+              value={stats.delivered}
+              iconClass="stat-icon-green"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              }
+            />
+            <StatCard
+              label="Assigned"
+              value={stats.assigned}
+              iconClass="stat-icon-blue"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              }
+            />
+            <StatCard
+              label="Total Payment Today"
+              value={stats.total_payment_day}
+              currency="MAD"
+              iconClass="stat-icon-orange"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              }
+            />
+          </div>
+
+          {/* Last 5 delivered */}
+          <p className="delivery-section-title">Last 5 Delivered Orders</p>
+          <div className="delivery-table-wrapper">
+            {stats.last_delivered.length === 0 ? (
+              <div className="delivery-empty">No delivered orders yet.</div>
+            ) : (
+              <table className="delivery-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Client</th>
+                    <th>City</th>
+                    <th>Total</th>
+                    <th>Delivered at</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.last_delivered.map((order) => (
+                    <tr key={order.id}>
+                      <td className="col-id">#{order.id}</td>
+                      <td>{order.shipping_name}</td>
+                      <td>{order.shipping_city}</td>
+                      <td>{order.total} {order.currency}</td>
+                      <td style={{ color: "#9ca3af" }}>{formatDate(order.delivered_at)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </>
       )}
+    </DeliveryLayout>
+  );
+}
+
+function StatCard({ label, value, currency, icon, iconClass }) {
+  return (
+    <div className="delivery-stat-card">
+      <div className="delivery-stat-card-top">
+        <p className="delivery-stat-label">{label}</p>
+        <div className={`delivery-stat-icon ${iconClass}`}>{icon}</div>
+      </div>
+      <div className="delivery-stat-value">
+        {value ?? 0}
+        {currency && <span className="currency">{currency}</span>}
+      </div>
     </div>
   );
 }
 
-function StatusBadge({ status }) {
-  const styles = {
-    assigned: "bg-blue-100 text-blue-700",
-    in_progress: "bg-yellow-100 text-yellow-700",
-    delivered: "bg-green-100 text-green-700",
-    canceled: "bg-red-100 text-red-700",
-  };
-  return (
-    <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? "bg-gray-100"}`}
-    >
-      {status}
-    </span>
-  );
-}
-
-function PaymentBadge({ status }) {
-  const styles = {
-    unpaid: "bg-red-100 text-red-700",
-    collected_by_deliveryman: "bg-orange-100 text-orange-700",
-    paid: "bg-green-100 text-green-700",
-  };
-  return (
-    <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? "bg-gray-100"}`}
-    >
-      {status}
-    </span>
-  );
+function formatDate(dateStr) {
+  if (!dateStr) return "—";
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
