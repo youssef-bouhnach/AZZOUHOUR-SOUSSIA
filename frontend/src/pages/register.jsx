@@ -3,6 +3,7 @@ import axios from "../lib/axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import "../styles/login.css";
+import { Verified } from "lucide-react";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -35,10 +36,12 @@ function Register() {
       // Auto-login after register — store user in context
       if (response.data.user) {
         setUser(response.data.user);
-        navigate(redirectTo);
-      } else {
-        // Email verification required
-        navigate("/verify-email");
+        if (response.data.user.email_Verified_at) {
+          // Email verification required
+          navigate(redirectTo);
+        } else {
+          navigate("/verify-email");
+        }
       }
     } catch (err) {
       if (err.response?.status === 422) {

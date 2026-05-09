@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-const ProtectedRoute = ({ children, role }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -10,13 +9,16 @@ const ProtectedRoute = ({ children, role }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
-  
-  // if (!user.email_verified_at) return <Navigate to="/verify-email" />;
-  
-  if (role && user.role !== role) return <Navigate to="/" />;
+  if (!user.email_verified_at) {
+    return <Navigate to="/verify-email" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorizedPage" replace />;
+  }
 
   return children;
 };

@@ -23,6 +23,8 @@ import Blog from "./pages/blog";
 import Contact from "./pages/contact";
 import About from "./pages/about";
 import Favorites from "./pages/favorites";
+import DeliveryDashboard from "./pages/DeliveryDashboard";
+import UnauthorizedPage from "./pages/aunothorized";
 
 function App() {
   return (
@@ -37,7 +39,7 @@ function App() {
           <Route
             path="/admin/dashboard"
             element={
-              <ProtectedRoute role="admin">
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminDashboard />
               </ProtectedRoute>
             }
@@ -46,7 +48,10 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/products/detail/:id" element={<ProductsDetail />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/categories/:slug/products" element={<CategoriesProducts />} />
+          <Route
+            path="/categories/:slug/products"
+            element={<CategoriesProducts />}
+          />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
@@ -56,6 +61,15 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route
+            path="/delivery/orders"
+            element={
+              <ProtectedRoute allowedRoles={["deliveryman"]}>
+                <DeliveryDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/unauthorizedPage" element={<UnauthorizedPage />} />
         </Routes>
       </Router>
     </>

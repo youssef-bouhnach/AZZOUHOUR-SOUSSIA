@@ -41,8 +41,19 @@ function Login() {
       if (response.data.user.role === "admin") {
         window.location.href =
           (import.meta.env.VITE_APP_URL ?? "http://localhost:8000") + "/admin";
-      } else {
+      } else if (response.data.user.role === "deliveryman") {
+
+          if(response.data.user.email_verified_at){
+            navigate('/delivery/orders');
+          }else{
+            navigate('/unauthorizedPage')
+          }
+        
+      } else if (response.data.user.email_verified_at) {
+        // Email verification required
         navigate(redirectTo);
+      } else {
+        navigate("/verify-email");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

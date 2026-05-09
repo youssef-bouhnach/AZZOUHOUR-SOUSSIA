@@ -18,4 +18,8 @@ export const STORAGE_URL = import.meta.env.VITE_STORAGE_URL ?? "http://localhost
 // Prime the CSRF cookie — call once on app startup
 export const initCsrf = () => instance.get("/sanctum/csrf-cookie");
 
+// Delivery Man
+export const getMyOrders = () => instance.get('/api/delivery/orders');
+export const updateOrder = (id, action) => instance.patch(`/api/delivery/orders/${id}/status`, { action });
+
 export default instance;
