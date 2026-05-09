@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DeliveryManController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // more admin pages! 
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/user/stats', function () {
         return response()->json([
             'products' => \App\Models\Product::count(),
@@ -37,6 +38,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ]);
     });
 });
+
+// Delivery Man routes
+Route::middleware(['auth:sanctum', 'deliverymanMIDD:deliveryman'])->group(function() {
+    Route::get('/delivery/orders', [DeliveryManController::class, 'myOrders']);
+    Route::patch('/delivery/orders/{order}/status', [DeliveryManController::class, 'updateOrder']);
+    Route::get('/delivery/profile', [DeliveryManController::class, 'profile']);
+});
+// // admin can also asses all orders:
+// Route::middleware(['auth:sanctum', 'deliverymanMIDD:deliveryman,admin'])->get(
+//     '/delivery/all', [DeliveryManController::class, 'index']
+// );
 
 // Admin only — index, show, create, update, delete
 Route::resource('products', ProductController::class);
@@ -60,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cart/{productId}',  [CartController::class, 'destroy']);
     Route::delete('/cart',              [CartController::class, 'clear']);
 
-    // Orders (ready for next step)
+    // Orders
     Route::post('/orders',              [OrderController::class, 'store']);
     Route::get('/orders',               [OrderController::class, 'index']);
     Route::get('/orders/{id}',          [OrderController::class, 'show']);

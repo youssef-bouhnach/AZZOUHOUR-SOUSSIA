@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\DeliveryAssignment;
 
 /** User must verify his email ..............> */
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'email',
         'password',
         'avatar',
+        'role',
     ];
 
     // RelationShips 
@@ -50,9 +52,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return $this->hasMany(Favorite::class);
     }
 
-    public function deliveryMan(): HasOne
+    public function deliveryAssignments() : HasMany
     {
-        return $this->hasOne(DeliveryMan::class);
+        return $this->hasMany(DeliveryAssignment::class, 'delivery_man_id');
     }
 
 

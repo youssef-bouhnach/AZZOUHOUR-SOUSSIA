@@ -2,64 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DeliveryMan;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryManController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    //  /api/delivery/orders
+    public function myOrders()
     {
-        return DeliveryMan::get();
+        $orders = Auth::user()
+            ->deliveryAssignments()
+            ->with(['order.user', 'order.deliveryAssignment'])
+            ->get()
+            ->map(fn($a) => $a->order);
+
+        return response()->json([
+            "orders" => $orders
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // /api/delivery/orders/{order}/status
+    public function updateOrder(Request $request, Order $order)
     {
-        //
-    }
+        $assignment = $order->deliveryAssignment;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Make sure this deliveryMan owns this assignment
+        abort_if($assignment->delivery_man_id !== Auth::id(), 403);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DeliveryMan $deliveryMan)
-    {
-        //
-    }
+        $request->validate([
+            'action' => 'required|in:delivered,canceled',
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DeliveryMan $deliveryMan)
-    {
-        //
-    }
+        if ($request->action === 'delivered') {
+            $assignment->update(['status' => 'delivered']);
+            $order->update([
+                'status'         => 'delivered',
+                'payment_status' => 'collected_by_deliveryman',
+            ]);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DeliveryMan $deliveryMan)
-    {
-        //
-    }
+        if ($request->action === 'canceled') {
+            $assignment->update(['status' => 'canceled']);
+            $order->update([
+                'status'         => 'canceled',
+                'payment_status' => 'unpaid',
+            ]);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DeliveryMan $deliveryMan)
-    {
-        //
+        return response()->json(['message' => 'Order updated.']);
     }
 }

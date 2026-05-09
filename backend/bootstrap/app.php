@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        $middleware->alias([
+            'deliverymanMIDD' => \App\Http\Middleware\DeliveryManMiddleware::class,
+        ]);
         $middleware->validateCsrfTokens(except: [
             'auth/register',
             'auth/login',

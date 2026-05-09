@@ -42,15 +42,15 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-    public function deliveryMan(): BelongsTo
+    public function deliveryAssignment()
     {
-        return $this->belongsTo(DeliveryMan::class);
+        return $this->hasOne(DeliveryAssignment::class);
     }
 
     // helpers
-    public function isPaid() : bool 
+    public function isPaid(): bool
     {
-        return $this->payment_status === 'paid';  
+        return $this->payment_status === 'paid';
     }
     public function markAsPaid(string $method = 'cmi'): void
     {
