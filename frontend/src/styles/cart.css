@@ -229,3 +229,16 @@
     width: 100%;
   }
 }
+
+/* Variant label in cart rows */
+.cart_variant_label {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-top: 2px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  padding: 1px 6px;
+  width: fit-content;
+}

@@ -69,8 +69,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Cart
     Route::get('/cart',                 [CartController::class, 'index']);
     Route::post('/cart',                [CartController::class, 'store']);
-    Route::patch('/cart/{productId}',   [CartController::class, 'update']);
-    Route::delete('/cart/{productId}',  [CartController::class, 'destroy']);
+    Route::patch('/cart/{cartItemId}',  [CartController::class, 'update']);
+    Route::delete('/cart/{cartItemId}', [CartController::class, 'destroy']);
     Route::delete('/cart',              [CartController::class, 'clear']);
 
     // Orders

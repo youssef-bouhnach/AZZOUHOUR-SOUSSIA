@@ -29,7 +29,7 @@ function CartDrawer() {
           )}
 
           {!loading && items.map((item) => (
-            <div key={item.product_id} className="cart_item">
+            <div key={item.id ?? `${item.product_id}_${item.variant_id}`} className="cart_item">
               <img
                 src={`${STORAGE_URL}/${item.image}`}
                 alt={item.name}
@@ -37,6 +37,9 @@ function CartDrawer() {
               />
               <div className="cart_item_info">
                 <p className="cart_item_name">{item.name}</p>
+                {item.variant_label && (
+                  <p className="cart_item_variant">{item.variant_label}</p>
+                )}
                 <p className="cart_item_price">
                   {item.quantity} × {Number(item.unit_price).toFixed(2)} MAD
                 </p>
@@ -45,15 +48,15 @@ function CartDrawer() {
                   <button
                     onClick={() =>
                       item.quantity > 1
-                        ? updateQuantity(item.product_id, item.quantity - 1)
-                        : removeFromCart(item.product_id)
+                        ? updateQuantity(item.id ?? item._key, item.quantity - 1)
+                        : removeFromCart(item.id ?? item._key)
                     }
                   >
                     −
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                    onClick={() => updateQuantity(item.id ?? item._key, item.quantity + 1)}
                     disabled={item.quantity >= item.stock}
                   >
                     +
@@ -62,7 +65,7 @@ function CartDrawer() {
               </div>
               <button
                 className="cart_item_remove"
-                onClick={() => removeFromCart(item.product_id)}
+                onClick={() => removeFromCart(item.id ?? item._key)}
                 title="Remove"
               >
                 ✕

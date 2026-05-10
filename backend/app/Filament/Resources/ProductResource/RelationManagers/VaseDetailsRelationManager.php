@@ -7,9 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\TextColumn;
 
 class VaseDetailsRelationManager extends RelationManager
 {
@@ -19,48 +16,61 @@ class VaseDetailsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-            Select::make('material')
-                ->options([
-                    'ceramic' => 'Ceramic',
-                    'glass'   => 'Glass',
-                    'metal'   => 'Metal',
-                    'plastic' => 'Plastic',
-                    'wood'    => 'Wood',
-                    'other'   => 'Other',
-                ])
-                ->required(),
-            Select::make('style')
-                ->options([
-                    'modern'      => 'Modern',
-                    'classic'     => 'Classic',
-                    'minimalist'  => 'Minimalist',
-                    'decorative'  => 'Decorative',
-                    'vintage'     => 'Vintage',
-                ])
-                ->required(),
-        ]);
+                Forms\Components\Select::make('material')
+                    ->label('Material')
+                    ->options([
+                        'ceramic' => 'Ceramic',
+                        'glass'   => 'Glass',
+                        'metal'   => 'Metal',
+                        'plastic' => 'Plastic',
+                        'wood'    => 'Wood',
+                        'other'   => 'Other',
+                    ])
+                    ->required(),
+
+                Forms\Components\Select::make('style')
+                    ->label('Style')
+                    ->options([
+                        'modern'     => 'Modern',
+                        'classic'    => 'Classic',
+                        'minimalist' => 'Minimalist',
+                        'decorative' => 'Decorative',
+                        'vintage'    => 'Vintage',
+                    ])
+                    ->required(),
+            ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('id')
+            ->recordTitleAttribute('material')
             ->columns([
-                TextColumn::make('id'),
-                TextColumn::make('material')
+                Tables\Columns\TextColumn::make('material')
+                    ->label('Material')
                     ->badge()
-                    ->color('warning'),
-                TextColumn::make('style')
+                    ->color(fn ($state) => match ($state) {
+                        'ceramic' => 'warning',
+                        'glass'   => 'info',
+                        'metal'   => 'gray',
+                        'plastic' => 'danger',
+                        'wood'    => 'success',
+                        default   => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('style')
+                    ->label('Style')
                     ->badge()
-                    ->color('success'),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->color(fn ($state) => match ($state) {
+                        'modern'     => 'info',
+                        'classic'    => 'warning',
+                        'minimalist' => 'gray',
+                        'decorative' => 'success',
+                        'vintage'    => 'danger',
+                        default      => 'gray',
+                    }),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])

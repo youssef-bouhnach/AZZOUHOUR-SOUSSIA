@@ -53,18 +53,15 @@ class AuthController extends Controller
         // Create user
         $user = User::create($fields);
 
+        // Regenerate session (log the user in via session before sending email)
+        Auth::login($user);
+        $request->session()->regenerate();
+
         if (in_array($user->role, ['admin', 'deliveryMan'])) {
             $user->markEmailAsVerified(); // no email needed
         } else {
-            event(new Registered($user));
+            event(new Registered($user)); // sends verification email
         }
-
-        // Regenerate session
-        $request->session()->regenerate();
-
-        /** The verification email */
-        $user->SendEmailVerificationNotification();
-        event(new Registered($user));
 
         return response()->json([
             'message' => 'User successfully registered',

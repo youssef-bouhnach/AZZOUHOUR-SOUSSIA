@@ -55,11 +55,11 @@ export const CartProvider = ({ children }) => {
     if (guestItems.length === 0) return;
 
     try {
-      // Push each guest item to the server cart
       await Promise.all(
         guestItems.map((item) =>
           axios.post("/api/cart", {
             product_id: item.product_id,
+            variant_id: item.variant_id ?? null,
             quantity: item.quantity,
           })
         )
@@ -85,32 +85,41 @@ export const CartProvider = ({ children }) => {
   }, [user, fetchCart, mergeGuestCart]);
 
   // ── Add to cart ──
-  const addToCart = async (product, quantity = 1) => {
-    // product can be an object { id, name, image, unit_price, stock } or just an id
-    // productsDetail passes the full product object so we can store it for guests
+  const addToCart = async (product, quantity = 1, variantId = null) => {
     if (user) {
       const productId = typeof product === "object" ? product.id : product;
-      await axios.post("/api/cart", { product_id: productId, quantity });
+      await axios.post("/api/cart", { product_id: productId, variant_id: variantId, quantity });
       await fetchCart();
     } else {
-      // Guest: update localStorage
+      // Guest: use product_id + variant_id as the unique key
       const guestItems = loadGuestCart();
-      const existing = guestItems.find((i) => i.product_id === product.id);
+      const key = variantId ? `${product.id}_v${variantId}` : `${product.id}`;
+      const existing = guestItems.find((i) => i._key === key);
+
+      const unitPrice = variantId && product.variants
+        ? parseFloat(product.variants.find(v => v.id === variantId)?.price ?? product.promo_price ?? product.price)
+        : parseFloat(product.promo_price ?? product.price);
+
+      const stock = variantId && product.variants
+        ? (product.variants.find(v => v.id === variantId)?.stock ?? product.stock)
+        : product.stock;
 
       if (existing) {
-        existing.quantity = Math.min(
-          existing.quantity + quantity,
-          product.stock ?? 999
-        );
+        existing.quantity = Math.min(existing.quantity + quantity, stock ?? 999);
+        existing.subtotal = unitPrice * existing.quantity;
       } else {
         guestItems.push({
+          _key: key,
           product_id: product.id,
+          variant_id: variantId,
+          variant_label: null, // guests don't need label display for now
           name: product.name,
           image: product.image,
-          unit_price: parseFloat(product.promo_price ?? product.price),
+          unit_price: unitPrice,
+          currency: product.currency || "MAD",
           quantity,
-          stock: product.stock,
-          subtotal: parseFloat(product.promo_price ?? product.price) * quantity,
+          stock,
+          subtotal: unitPrice * quantity,
         });
       }
 
@@ -122,27 +131,27 @@ export const CartProvider = ({ children }) => {
     setIsOpen(true);
   };
 
-  // ── Remove from cart ──
-  const removeFromCart = async (productId) => {
+  // ── Remove from cart ── (uses cart item id for logged-in, _key for guest)
+  const removeFromCart = async (itemId) => {
     if (user) {
-      await axios.delete(`/api/cart/${productId}`);
+      await axios.delete(`/api/cart/${itemId}`);
       await fetchCart();
     } else {
-      const updated = loadGuestCart().filter((i) => i.product_id !== productId);
+      const updated = loadGuestCart().filter((i) => i._key !== itemId && i.product_id !== itemId);
       saveGuestCart(updated);
       setItems(updated);
       setTotal(calcGuestTotal(updated));
     }
   };
 
-  // ── Update quantity ──
-  const updateQuantity = async (productId, quantity) => {
+  // ── Update quantity ── (uses cart item id for logged-in, _key for guest)
+  const updateQuantity = async (itemId, quantity) => {
     if (user) {
-      await axios.patch(`/api/cart/${productId}`, { quantity });
+      await axios.patch(`/api/cart/${itemId}`, { quantity });
       await fetchCart();
     } else {
       const updated = loadGuestCart().map((i) =>
-        i.product_id === productId
+        (i._key === itemId || i.product_id === itemId)
           ? { ...i, quantity, subtotal: i.unit_price * quantity }
           : i
       );

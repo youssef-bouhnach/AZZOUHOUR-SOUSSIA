@@ -57,6 +57,7 @@ function ProductsDetail() {
   const { isFavorite, toggleFavorite } = useFavorite();
 
   const [product, setProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [cartStatus, setCartStatus] = useState(null);
   const [cartMessage, setCartMessage] = useState("");
@@ -65,7 +66,14 @@ function ProductsDetail() {
   useEffect(() => {
     axios
       .get(`/api/products/${id}`)
-      .then((res) => setProduct(res.data.product))
+      .then((res) => {
+        const p = res.data.product;
+        setProduct(p);
+        // auto-select first variant if any
+        if (p.variants && p.variants.length > 0) {
+          setSelectedVariant(p.variants[0]);
+        }
+      })
       .catch(console.error);
   }, [id]);
 
@@ -74,12 +82,12 @@ function ProductsDetail() {
     setCartStatus("loading");
     setCartMessage("");
     try {
-      await addToCart(product, quantity);
+      await addToCart(product, quantity, selectedVariant?.id ?? null);
       setCartStatus("success");
-      setCartMessage("Produit ajouté au panier !");
+      setCartMessage(t('productDetail.added'));
     } catch (err) {
       setCartStatus("error");
-      setCartMessage(err.response?.data?.message || "Erreur lors de l'ajout.");
+      setCartMessage(err.response?.data?.message || t('productDetail.addError'));
     }
   };
 
@@ -104,8 +112,25 @@ function ProductsDetail() {
   }
 
   const status = STATUS_MAP[product.status] || { label: product.status, cls: "" };
-  const hasPromo = !!product.promo_price;
-  const price = hasPromo ? product.promo_price : product.price;
+
+  // If a variant is selected, its price and stock take priority
+  const hasVariants = product.variants && product.variants.length > 0;
+  const activeStock = selectedVariant ? selectedVariant.stock : product.stock;
+  const hasPromo = !selectedVariant && !!product.promo_price;
+  const price = selectedVariant
+    ? selectedVariant.price
+    : (product.promo_price ?? product.price);
+
+  /* Build a human-readable label for each variant */
+  const variantLabel = (v) => {
+    const parts = [];
+    if (v.size)     parts.push(v.size);
+    if (v.diameter) parts.push(`Ø ${v.diameter} cm`);
+    if (v.height)   parts.push(`H ${v.height} cm`);
+    if (v.weight)   parts.push(`${v.weight} kg`);
+    if (v.duration) parts.push(v.duration);
+    return parts.length ? parts.join(" · ") : `Variante #${v.id}`;
+  };
 
   return (
     <>
@@ -154,7 +179,32 @@ function ProductsDetail() {
                 <span className="pd_price_original">{product.price} MAD</span>
               )}
               {hasPromo && <span className="pd_discount_badge">Promo</span>}
+              {selectedVariant && (
+                <span className="pd_variant_price_note">prix de la variante</span>
+              )}
             </div>
+
+            {/* Variants dropdown */}
+            {hasVariants && (
+              <div className="pd_variant_wrap">
+                <label className="pd_variant_label">Variante</label>
+                <select
+                  className="pd_variant_select"
+                  value={selectedVariant?.id ?? ""}
+                  onChange={(e) => {
+                    const v = product.variants.find((v) => v.id === Number(e.target.value));
+                    setSelectedVariant(v || null);
+                    setQuantity(1);
+                  }}
+                >
+                  {product.variants.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {variantLabel(v)} — {v.price} {product.currency || "MAD"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Description */}
             {product.description && (
@@ -171,7 +221,7 @@ function ProductsDetail() {
               </div>
               <div className="pd_meta_item">
                 <span className="pd_meta_label">Stock</span>
-                <span className="pd_meta_val">{product.stock > 0 ? `${product.stock} disponibles` : "Épuisé"}</span>
+                <span className="pd_meta_val">{activeStock > 0 ? `${activeStock} disponibles` : "Épuisé"}</span>
               </div>
             </div>
 
@@ -191,8 +241,8 @@ function ProductsDetail() {
                 <span className="pd_qty_val">{quantity}</span>
                 <button
                   className="pd_qty_btn"
-                  onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
-                  disabled={quantity >= product.stock}
+                  onClick={() => setQuantity((q) => Math.min(activeStock, q + 1))}
+                  disabled={quantity >= activeStock}
                   aria-label="Augmenter"
                 >+</button>
               </div>
@@ -201,10 +251,10 @@ function ProductsDetail() {
               <button
                 className="pd_cart_btn"
                 onClick={handleAddToCart}
-                disabled={cartStatus === "loading" || product.stock === 0}
+                disabled={cartStatus === "loading" || activeStock === 0}
               >
                 <CartIcon />
-                {product.stock === 0
+                {activeStock === 0
                   ? "Rupture de stock"
                   : cartStatus === "loading"
                     ? "Ajout en cours..."

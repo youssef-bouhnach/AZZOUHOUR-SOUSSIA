@@ -28,7 +28,7 @@ Route::prefix('auth')->group(function () {
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('http://localhost:5173/login?verified=1');
-})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 // Resend verification email
 Route::post('/email/resend', function (HttpRequest $request) {

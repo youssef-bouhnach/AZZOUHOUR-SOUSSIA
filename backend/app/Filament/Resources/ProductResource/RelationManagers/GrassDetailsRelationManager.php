@@ -7,8 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GrassDetailsRelationManager extends RelationManager
 {
@@ -19,11 +17,32 @@ class GrassDetailsRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\Select::make('size')
-                    ->options(['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large']),
+                    ->label('Size')
+                    ->options([
+                        'small'  => 'Small',
+                        'medium' => 'Medium',
+                        'large'  => 'Large',
+                    ])
+                    ->required(),
+
                 Forms\Components\Select::make('grass_type')
-                    ->options(['khassna' => 'Khassna', 'nsowlo' => 'Nsowlo', 'si' => 'Si', 'houssien' => 'Houssien']),
+                    ->label('Grass Type')
+                    ->options([
+                        'khassna'  => 'Khassna',
+                        'nsowlo'   => 'Nsowlo',
+                        'si'       => 'Si',
+                        'houssien' => 'Houssien',
+                    ])
+                    ->required(),
+
                 Forms\Components\Select::make('growth')
-                    ->options(['fast' => 'Fast', 'slow' => 'Slow', 'medium' => 'Medium']),
+                    ->label('Growth Rate')
+                    ->options([
+                        'slow'   => 'Slow',
+                        'medium' => 'Medium',
+                        'fast'   => 'Fast',
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -32,13 +51,32 @@ class GrassDetailsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('grass_type')
             ->columns([
-                Tables\Columns\TextColumn::make('size'),
-                Tables\Columns\TextColumn::make('grass_type'),
-                Tables\Columns\TextColumn::make('growth'),
+                Tables\Columns\TextColumn::make('size')
+                    ->label('Size')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'small'  => 'info',
+                        'medium' => 'warning',
+                        'large'  => 'success',
+                        default  => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('grass_type')
+                    ->label('Grass Type')
+                    ->badge()
+                    ->color('success'),
+
+                Tables\Columns\TextColumn::make('growth')
+                    ->label('Growth Rate')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'fast'   => 'success',
+                        'medium' => 'warning',
+                        'slow'   => 'gray',
+                        default  => 'gray',
+                    }),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])

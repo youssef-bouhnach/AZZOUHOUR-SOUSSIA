@@ -2,14 +2,11 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../lib/axios";
 import { useAuth } from "../context/authContext";
-import { Mail, Lock, Eye, EyeOff, Leaf, Sparkles } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Leaf } from "lucide-react";
 import "../styles/login.css";
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -18,22 +15,17 @@ function Login() {
   const location = useLocation();
   const { setUser } = useAuth();
 
-  // Read ?redirect= param so we can send the user back after login
   const params = new URLSearchParams(location.search);
   const redirectTo = params.get("redirect") || "/";
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
       const response = await axios.post("/auth/login", formData);
       setUser(response.data.user);
@@ -42,15 +34,12 @@ function Login() {
         window.location.href =
           (import.meta.env.VITE_APP_URL ?? "http://localhost:8000") + "/admin";
       } else if (response.data.user.role === "deliveryman") {
-
-          if(response.data.user.email_verified_at){
-            navigate('/delivery/orders');
-          }else{
-            navigate('/unauthorizedPage')
-          }
-        
+        if (response.data.user.email_verified_at) {
+          navigate("/delivery/orders");
+        } else {
+          navigate("/unauthorizedPage");
+        }
       } else if (response.data.user.email_verified_at) {
-        // Email verification required
         navigate(redirectTo);
       } else {
         navigate("/verify-email");
@@ -63,109 +52,118 @@ function Login() {
   };
 
   return (
-    <div className="auth-container">
-      {/* Floating leaves animation */}
-      <div className="floating-leaves">
-        <Leaf className="leaf leaf-1" />
-        <Leaf className="leaf leaf-2" />
-        <Leaf className="leaf leaf-3" />
-        <Leaf className="leaf leaf-4" />
+    <div className="auth-page">
+      {/* ── Left panel ── */}
+      <div className="auth-left">
+        <div className="auth-left-bg" />
+        <div className="auth-left-overlay" />
+
+        <div className="auth-left-top">
+          <div className="auth-brand">
+            <Leaf />
+            AZZOHOUR SOUSSIYA
+          </div>
+        </div>
+
+        <div className="auth-left-bottom">
+          <h1 className="auth-headline">
+            Where every<br />garden <span>begins.</span>
+          </h1>
+          <p className="auth-tagline">
+            From rich soil to rare seeds, from heritage trees to wild
+            blooms — sourced from growers who care, delivered to
+            the door of your dreams.
+          </p>
+          <div className="auth-badges">
+            <span className="auth-badge">🌱 Seeds &amp; Soil</span>
+            <span className="auth-badge">🌸 Blooms</span>
+            <span className="auth-badge">🌳 Trees</span>
+          </div>
+        </div>
       </div>
 
-      <div className="auth-card">
-        {/* Logo & Header */}
-        <div className="auth-header">
-          <div className="logo-circle">
-            <Sparkles className="logo-icon" />
-          </div>
-          <h1 className="auth-title">Welcome Back</h1>
-          <p className="auth-subtitle">Sign in to AZZOUHOUR-SOUSSIA</p>
+      {/* ── Right panel ── */}
+      <div className="auth-right">
+        {/* Tabs */}
+        <div className="auth-tabs">
+          <button className="auth-tab active">
+            Sign in
+          </button>
+          <button className="auth-tab" onClick={() => navigate(`/register${location.search}`)}>
+            Create account
+          </button>
         </div>
+
+        <h2 className="auth-form-title">Welcome back.</h2>
+        <p className="auth-form-subtitle">Sign in to continue growing with AZZOHOUR SOUSSIYA.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
             <div className="error-banner">
-              <div className="error-icon">⚠️</div>
-              <div>
-                <div className="error-title">Authentication Failed</div>
-                <div className="error-message">
-                  Invalid email or password. Please try again.
-                </div>
-              </div>
+              {error}
             </div>
           )}
 
+          {/* Email */}
           <div className="form-group">
-            <label className="form-label">
-              <Mail className="label-icon" />
-              Email Address
-            </label>
+            <label className="form-label">Email address</label>
             <div className="input-wrapper">
+              <Mail className="input-icon" />
               <input
+                className="form-input"
                 type="email"
                 name="email"
                 value={formData.email}
+                placeholder="you@garden.com"
                 onChange={handleChange}
                 required
-                placeholder="your@email.com"
                 autoComplete="email"
-                className="form-input"
               />
             </div>
           </div>
 
+          {/* Password */}
           <div className="form-group">
-            <label className="form-label">
-              <Lock className="label-icon" />
-              Password
-            </label>
-            <div className="input-wrapper password-wrapper">
+            <label className="form-label">Password</label>
+            <div className="input-wrapper">
+              <Lock className="input-icon" />
               <input
+                className="form-input"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
+                placeholder="••••••••"
                 onChange={handleChange}
                 required
-                placeholder="••••••••"
                 autoComplete="current-password"
-                className="form-input"
               />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
 
           <button type="submit" disabled={loading} className="submit-btn">
             {loading ? (
-              <>
-                <div className="spinner"></div>
-                Signing in...
-              </>
+              <><div className="spinner" /> Signing in...</>
             ) : (
-              <>
-                <Leaf className="btn-icon" />
-                Sign In
-              </>
+              "Sign in →"
             )}
           </button>
-
-          <div className="auth-footer">
-            <p className="footer-text">
-              Don't have an account?{" "}
-              <span
-                className="footer-link"
-                onClick={() => navigate("/register")}
-              >
-                Create Account
-              </span>
-            </p>
-          </div>
         </form>
+
+        <div className="auth-footer">
+          <p className="footer-text">
+            Don't have an account?{" "}
+            <span className="footer-link" onClick={() => navigate(`/register${location.search}`)}>
+              Create account
+            </span>
+          </p>
+        </div>
+
+        <p className="auth-terms">
+          By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy</a>.
+        </p>
       </div>
     </div>
   );

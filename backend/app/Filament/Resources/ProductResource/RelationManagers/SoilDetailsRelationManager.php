@@ -7,8 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SoilDetailsRelationManager extends RelationManager
 {
@@ -18,22 +16,51 @@ class SoilDetailsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
+                Forms\Components\TextInput::make('ph')
+                    ->label('pH')
+                    ->numeric()
+                    ->step(0.1)
+                    ->minValue(0)
+                    ->maxValue(14),
+
+                Forms\Components\TextInput::make('composition')
+                    ->label('Composition')
                     ->maxLength(255),
+
+                Forms\Components\Select::make('grass_type')
+                    ->label('Grass Type')
+                    ->options([
+                        'natural'    => 'Natural',
+                        'artificial' => 'Artificial',
+                    ])
+                    ->required(),
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('id')
+            ->recordTitleAttribute('composition')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('ph')
+                    ->label('pH')
+                    ->placeholder('—'),
+
+                Tables\Columns\TextColumn::make('composition')
+                    ->label('Composition')
+                    ->placeholder('—')
+                    ->limit(40),
+
+                Tables\Columns\TextColumn::make('grass_type')
+                    ->label('Grass Type')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'natural'    => 'success',
+                        'artificial' => 'warning',
+                        default      => 'gray',
+                    }),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])

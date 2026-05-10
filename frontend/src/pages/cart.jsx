@@ -50,63 +50,34 @@ function Cart() {
                 </thead>
                 <tbody>
                   {items.map((item) => (
-                    <tr key={item.product_id}>
-                      {/* Remove */}
+                    <tr key={item.id ?? `${item.product_id}_${item.variant_id}`}>
                       <td>
-                        <button
-                          className="cart_remove_btn"
-                          onClick={() => removeFromCart(item.product_id)}
-                          title="Remove"
-                        >
-                          ✕
-                        </button>
+                        <button className="cart_remove_btn" onClick={() => removeFromCart(item.id ?? item._key)} title="Remove">✕</button>
                       </td>
-
-                      {/* Product */}
                       <td>
                         <div className="cart_product_cell">
-                          <img
-                            src={`${STORAGE_URL}/${item.image}`}
-                            alt={item.name}
-                            className="cart_product_img"
-                          />
-                          <span className="cart_product_name">{item.name}</span>
+                          <img src={`${STORAGE_URL}/${item.image}`} alt={item.name} className="cart_product_img" />
+                          <div>
+                            <span className="cart_product_name">{item.name}</span>
+                            {item.variant_label && (
+                              <span className="cart_variant_label">{item.variant_label}</span>
+                            )}
+                          </div>
                         </div>
                       </td>
-
-                      {/* Unit price */}
                       <td className="cart_price">
-                        {Number(item.unit_price).toFixed(2)} 
-                        <span> {item.currency} </span> 
+                        {Number(item.unit_price).toFixed(2)}
+                        <span> {item.currency} </span>
                       </td>
-
-                      {/* Quantity */}
                       <td>
                         <div className="cart_qty_control">
-                          <button
-                            onClick={() =>
-                              item.quantity > 1
-                                ? updateQuantity(item.product_id, item.quantity - 1)
-                                : removeFromCart(item.product_id)
-                            }
-                          >
-                            −
-                          </button>
+                          <button onClick={() => item.quantity > 1 ? updateQuantity(item.id ?? item._key, item.quantity - 1) : removeFromCart(item.id ?? item._key)}>−</button>
                           <span>{item.quantity}</span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.product_id, item.quantity + 1)
-                            }
-                            disabled={item.quantity >= item.stock}
-                          >
-                            +
-                          </button>
+                          <button onClick={() => updateQuantity(item.id ?? item._key, item.quantity + 1)} disabled={item.quantity >= item.stock}>+</button>
                         </div>
                       </td>
-
-                      {/* Subtotal */}
                       <td className="cart_subtotal_cell">
-                        {Number(item.subtotal).toFixed(2)} 
+                        {Number(item.subtotal).toFixed(2)}
                         <span> {item.currency} </span>
                       </td>
                     </tr>

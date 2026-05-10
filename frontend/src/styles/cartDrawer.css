@@ -215,3 +215,15 @@
 .cart_checkout_btn:hover {
   background: #163d36;
 }
+
+/* Variant label in drawer */
+.cart_item_variant {
+  font-size: 0.72rem;
+  color: #6b7280;
+  font-weight: 500;
+  background: #f3f4f6;
+  border-radius: 4px;
+  padding: 1px 6px;
+  width: fit-content;
+  margin: 2px 0 4px;
+}
