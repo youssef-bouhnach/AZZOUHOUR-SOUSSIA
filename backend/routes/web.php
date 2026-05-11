@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\ProductController;
+use App\Models\User;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request as HttpRequest;
 
@@ -24,15 +27,13 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class , 'logout']);
 });
 
-/** email verification */
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('http://localhost:5173/login?verified=1');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+/** Email Verification */
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')->name('verification.verify');
 
-// Resend verification email
+/** Resend Verification Email */
 Route::post('/email/resend', function (HttpRequest $request) {
-    $request->user()->SendEmailVerificationNotification();
+    $request->user()->sendEmailVerificationNotification();
     return response()->json(['message' => 'Verification link sent!']);
 })->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
 

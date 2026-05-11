@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
+use Cloudinary\Cloudinary;
+use Cloudinary\Configuration\Configuration;
 
 class CategoryController extends Controller
 {
@@ -30,7 +33,25 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'name'  => 'required|string|max:100',
+            'slug'  => 'required|string|max:100|unique:categories,slug',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $fields['image'] = (new CloudinaryService)->upload(
+                $request->file('image'),
+                'categories'
+            );
+        }
+
+        $category = Category::create($fields);
+
+        return response()->json([
+            'category' => $category,
+            'products' => $category->products,
+        ]);
     }
 
     /**

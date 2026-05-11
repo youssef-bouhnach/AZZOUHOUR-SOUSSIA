@@ -54,9 +54,9 @@ class ProductResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
                     ->image()
-                    ->disk('public')
-                    ->directory('products')
-                    ->visibility('public'),
+                    ->saveUploadedFileUsing(function ($file) {
+                        return (new \App\Services\CloudinaryService)->upload($file, 'products');
+                    }),
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric(),
@@ -198,41 +198,41 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(fn () => __('admin.product.name'))
+                    ->label(fn() => __('admin.product.name'))
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('image')
-                    ->label(fn () => __('admin.product.image'))
-                    ->url(fn ($record) => config('app.url') . '/storage/' . $record->image),
+                    ->label(fn() => __('admin.product.image'))
+                    ->url(fn($record) => $record->image),
                 Tables\Columns\TextColumn::make('price')
-                    ->label(fn () => __('admin.product.price'))
+                    ->label(fn() => __('admin.product.price'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('currency')
-                    ->label(fn () => __('admin.product.currency'))
+                    ->label(fn() => __('admin.product.currency'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('promo_price')
-                    ->label(fn () => __('admin.product.promo_price'))
+                    ->label(fn() => __('admin.product.promo_price'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stock')
-                    ->label(fn () => __('admin.product.stock'))
+                    ->label(fn() => __('admin.product.stock'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->label(fn () => __('admin.product.status')),
+                    ->label(fn() => __('admin.product.status')),
                 Tables\Columns\IconColumn::make('is_featured')
-                    ->label(fn () => __('admin.product.is_featured'))
+                    ->label(fn() => __('admin.product.is_featured'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('color')
-                    ->label(fn () => __('admin.product.color'))
+                    ->label(fn() => __('admin.product.color'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
-                    ->label(fn () => __('admin.product.category'))
+                    ->label(fn() => __('admin.product.category'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('origin')
-                    ->label(fn () => __('admin.product.origin'))
+                    ->label(fn() => __('admin.product.origin'))
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_indoor')
-                    ->label(fn () => __('admin.product.is_indoor'))
+                    ->label(fn() => __('admin.product.is_indoor'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

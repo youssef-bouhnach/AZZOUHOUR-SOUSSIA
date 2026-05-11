@@ -56,6 +56,7 @@ Route::resource('products', ProductController::class);
 
 // get all categories
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::post('/categories', [CategoryController::class, 'store']);
 
 // filter products by categorie
 Route::get('/categories/{category:slug}/products', [ProductController::class, 'byCategory']);

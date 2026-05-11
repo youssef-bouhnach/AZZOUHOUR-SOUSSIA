@@ -51,6 +51,27 @@ class CategoryResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
+                // cloudinary image
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->saveUploadedFileUsing(function ($file) {
+                        $cloudinary = new \Cloudinary\Cloudinary(
+                            \Cloudinary\Configuration\Configuration::instance([
+                                'cloud' => [
+                                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                                    'api_key'    => env('CLOUDINARY_API_KEY'),
+                                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                                ],
+                            ])
+                        );
+
+                        $result = $cloudinary->uploadApi()->upload(
+                            $file->getRealPath(),
+                            ['folder' => 'categories']
+                        );
+
+                        return $result['secure_url'];
+                    }),
             ]);
     }
 
@@ -60,11 +81,13 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->searchable(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->url(fn($record) => $record->image), // use URL as-is
                 Tables\Columns\TextColumn::make('name')
-                    ->label(fn () => __('admin.category.name'))
+                    ->label(fn() => __('admin.category.name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->label(fn () => __('admin.category.slug'))
+                    ->label(fn() => __('admin.category.slug'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

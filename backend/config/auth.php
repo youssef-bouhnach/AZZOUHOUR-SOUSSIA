@@ -42,6 +42,11 @@ return [
         ],
     ],
 
+    // signed URLs are set to expire (for verification email)
+    'verification' => [
+        'expire' => 60, // minutes ✅
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers

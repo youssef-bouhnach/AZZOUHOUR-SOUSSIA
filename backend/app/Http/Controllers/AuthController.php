@@ -57,7 +57,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        if (in_array($user->role, ['admin', 'deliveryMan'])) {
+        if ($user->role === 'admin') {
             $user->markEmailAsVerified(); // no email needed
         } else {
             event(new Registered($user)); // sends verification email
@@ -67,6 +67,11 @@ class AuthController extends Controller
             'message' => 'User successfully registered',
             'user' => $user,
         ], 201);
+    }
+
+    public function email_is_verify(Request $request) 
+    {
+        
     }
 
     public function logout(Request $request)

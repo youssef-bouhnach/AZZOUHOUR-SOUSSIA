@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
+use App\Services\CloudinaryService;
 use Illuminate\http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -43,11 +44,12 @@ class ProductController extends Controller
         // the array that comes from /StoreProductRequest
         $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = $path;
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = (new CloudinaryService)->upload(
+                $request->file('avatar'),
+                'products'
+            );
         }
-
         // First create product
         $product = Product::create($data);
 
@@ -119,14 +121,11 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            // delete old image 
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            // store new image
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = $path;
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = (new CloudinaryService)->upload(
+                $request->file('avatar'),
+                'products'
+            );
         }
 
         $product->update($data);

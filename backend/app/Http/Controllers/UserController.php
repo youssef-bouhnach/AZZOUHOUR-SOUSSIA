@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Services\CloudinaryService;
 
 class UserController extends Controller
 {
@@ -20,15 +20,14 @@ class UserController extends Controller
 
         $data = $request->validate([
             'name'   => 'sometimes|string|max:255',
-            'avatar' => 'sometimes|image|max:2048',
+            'avatar' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         if ($request->hasFile('avatar')) {
-            // Delete old avatar
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = (new CloudinaryService)->upload(
+                $request->file('avatar'),
+                'avatars'
+            );
         }
 
         $user->update($data);
