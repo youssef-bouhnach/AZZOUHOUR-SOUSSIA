@@ -14,11 +14,11 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $totalOrders   = Order::count();
+        $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'pending')->count();
-        $revenue       = Order::where('payment_status', 'paid')->sum('total');
-        $users         = User::count();
-        $activeCarts   = CartItem::distinct('user_id')->count('user_id');
+        $revenue = Order::where('payment_status', 'paid')->sum('total');
+        $users = User::count();
+        $activeCarts = CartItem::distinct('user_id')->count('user_id');
 
         return [
             Stat::make(__('admin.widgets.total_orders'), $totalOrders)

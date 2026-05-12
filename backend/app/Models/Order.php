@@ -52,6 +52,12 @@ class Order extends Model
     {
         return $this->payment_status === 'paid';
     }
+
+    public function isCollectedByDeliveryman(): bool
+    {
+        return $this->payment_status === 'collected_by_deliveryman';
+    }
+
     public function markAsPaid(string $method = 'cmi'): void
     {
         $this->update([

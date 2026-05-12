@@ -28,7 +28,7 @@ const calcGuestTotal = (items) =>
   items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -73,6 +73,9 @@ export const CartProvider = ({ children }) => {
 
   // ── When user changes (login/logout) ──
   useEffect(() => {
+    // Wait for auth to finish resolving before deciding guest vs logged-in
+    if (authLoading) return;
+
     if (user) {
       // Merge any guest items then fetch the full server cart
       mergeGuestCart().then(() => fetchCart());
@@ -82,7 +85,7 @@ export const CartProvider = ({ children }) => {
       setItems(guestItems);
       setTotal(calcGuestTotal(guestItems));
     }
-  }, [user, fetchCart, mergeGuestCart]);
+  }, [user, authLoading, fetchCart, mergeGuestCart]);
 
   // ── Add to cart ──
   const addToCart = async (product, quantity = 1, variantId = null) => {

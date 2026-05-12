@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Heart, Trash2, Loader2, Plus } from "lucide-react";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/GreenFooter.jsx";
-import axios from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import { useCart } from "../context/cartContext";
 import { useFavorite } from "../context/favoriteContext";
 import { useAuth } from "../context/authContext";
@@ -112,7 +112,7 @@ function Favorites() {
                     <img
                       src={
                         product.image
-                          ? `${import.meta.env.VITE_APP_URL ?? "http://localhost:8000"}/storage/${product.image}`
+                          ? getImageUrl(product.image)
                           : "/placeholder.svg"
                       }
                       alt={product.name}

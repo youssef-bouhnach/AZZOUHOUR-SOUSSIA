@@ -15,6 +15,18 @@ const instance = axios.create({
 // Base URL for storage/image assets (direct, not proxied)
 export const STORAGE_URL = import.meta.env.VITE_STORAGE_URL ?? "http://localhost:8000/storage";
 
+/**
+ * Resolve an image path to a displayable URL.
+ * - If the value is already a full URL (Cloudinary, etc.), return it as-is.
+ * - If it's a relative path, prepend STORAGE_URL.
+ * - If falsy, return the placeholder.
+ */
+export const getImageUrl = (image, placeholder = "/placeholder.svg") => {
+  if (!image) return placeholder;
+  if (image.startsWith("http://") || image.startsWith("https://")) return image;
+  return `${STORAGE_URL}/${image}`;
+};
+
 // Prime the CSRF cookie — call once on app startup
 export const initCsrf = () => instance.get("/sanctum/csrf-cookie");
 

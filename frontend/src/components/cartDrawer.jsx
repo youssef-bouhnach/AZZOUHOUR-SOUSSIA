@@ -1,6 +1,6 @@
 import { useCart } from "../context/cartContext";
 import { useNavigate } from "react-router-dom";
-import { STORAGE_URL } from "../config/api";
+import { getImageUrl } from "../config/api";
 import "../styles/cartDrawer.css";
 
 function CartDrawer() {
@@ -31,7 +31,7 @@ function CartDrawer() {
           {!loading && items.map((item) => (
             <div key={item.id ?? `${item.product_id}_${item.variant_id}`} className="cart_item">
               <img
-                src={`${STORAGE_URL}/${item.image}`}
+                src={getImageUrl(item.image)}
                 alt={item.name}
                 className="cart_item_img"
               />

@@ -73,6 +73,7 @@ class OrderResource extends Resource
                                 'unpaid' => __('admin.payment_status.unpaid'),
                                 'paid' => __('admin.payment_status.paid'),
                                 'refunded' => __('admin.payment_status.refunded'),
+                                'collected_by_deliveryman' => 'Collecté par livreur',
                             ])
                             ->required(),
 
@@ -143,16 +144,25 @@ class OrderResource extends Resource
                         'info' => 'shipped',
                         'danger' => 'cancelled',
                     ])
-                    ->formatStateUsing(fn($state) => __('admin.status.' . $state, [], app()->getLocale()) ?: $state),
+                    ->formatStateUsing(fn($state) => __($state, [], app()->getLocale()) ?: $state),
 
 
                 Tables\Columns\TextColumn::make('payment_status')
                     ->label('Paiement')
                     ->badge()
                     ->color(fn($state) => match ($state) {
-                        'paid' => 'success',
+                        'paid'                     => 'success',
                         'collected_by_deliveryman' => 'warning',
-                        'unpaid' => 'danger',
+                        'unpaid'                   => 'danger',
+                        'refunded'                 => 'info',
+                        default                    => 'gray',
+                    })
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'paid'                     => 'Payé',
+                        'collected_by_deliveryman' => '💰 Collecté livreur',
+                        'unpaid'                   => 'Non payé',
+                        'refunded'                 => 'Remboursé',
+                        default                    => $state,
                     }),
 
                 Tables\Columns\TextColumn::make('deliveryAssignment.deliveryMan.name')
@@ -181,7 +191,8 @@ class OrderResource extends Resource
                     ->options(fn() => [
                         'unpaid' => __('admin.payment_status.unpaid'),
                         'paid' => __('admin.payment_status.paid'),
-                        'refunded' => __('admin.payment_status.refunded'),
+                        'refunded'  => __('admin.payment_status.refunded'),
+                        'collected_by_deliveryman' => 'Collecté par livreur',
                     ]),
             ])
             ->actions([

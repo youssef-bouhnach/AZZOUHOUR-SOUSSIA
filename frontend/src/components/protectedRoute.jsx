@@ -12,12 +12,17 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/" replace />;
   }
 
-  // if (!user.email_verified_at) {
-  //   return <Navigate to="/verify-email" replace />;
-  // }
+  if (!user.email_verified_at) {
+    return <Navigate to="/verify-email" replace />;
+  }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorizedPage" replace />;
+  }
+
+  if (user.role === 'admin') {
+    window.location.href =
+      (import.meta.env.VITE_APP_URL ?? "http://localhost:8000") + "/admin";
   }
 
   return children;

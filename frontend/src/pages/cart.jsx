@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cartContext";
 import { useAuth } from "../context/authContext";
-import { STORAGE_URL } from "../config/api";
+import { getImageUrl } from "../config/api";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/GreenFooter.jsx";
 import "../styles/cart.css";
@@ -56,7 +56,7 @@ function Cart() {
                       </td>
                       <td>
                         <div className="cart_product_cell">
-                          <img src={`${STORAGE_URL}/${item.image}`} alt={item.name} className="cart_product_img" />
+                          <img src={getImageUrl(item.image)} alt={item.name} className="cart_product_img" />
                           <div>
                             <span className="cart_product_name">{item.name}</span>
                             {item.variant_label && (

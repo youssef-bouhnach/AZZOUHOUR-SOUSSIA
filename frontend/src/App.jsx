@@ -12,7 +12,7 @@ import AdminDashboard from "./pages/adminDashboard";
 import VerifyEmail from "./pages/verifyEmail";
 import Products from "./pages/products";
 import ProductsDetail from "./pages/productsDetail";
-import Categories from "./pages/Categories";
+import Categories1 from "./pages/categories1";
 import CategoriesProducts from "./pages/categoriesProducts";
 import Cart from "./pages/cart";
 import Checkout from "./pages/checkout";
@@ -50,7 +50,7 @@ function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/detail/:id" element={<ProductsDetail />} />
-          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories" element={<Categories1 />} />
           <Route
             path="/categories/:slug/products"
             element={<CategoriesProducts />}

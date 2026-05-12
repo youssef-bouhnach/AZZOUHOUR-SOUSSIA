@@ -1,6 +1,6 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { STORAGE_URL } from "../config/api";
+import { getImageUrl } from "../config/api";
 import "../styles/delivery.css";
 
 const NAV_ITEMS = [
@@ -99,7 +99,7 @@ export default function DeliveryLayout({ children }) {
           <div className="delivery-profile-card">
             {user?.avatar ? (
               <img
-                src={`${STORAGE_URL}/${user.avatar}`}
+                src={getImageUrl(user.avatar)}
                 alt={user.name}
                 className="delivery-profile-avatar"
               />
