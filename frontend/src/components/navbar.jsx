@@ -255,10 +255,10 @@ function Navbar() {
                     <>
                       <p className="nav_profile_guest">Welcome!</p>
                       <button className="nav_profile_item" onClick={() => { navigate("/login"); setProfileOpen(false); }}>
-                        🔑 Log in
+                        Log in
                       </button>
                       <button className="nav_profile_item" onClick={() => { navigate("/register"); setProfileOpen(false); }}>
-                        ✏️ Create account
+                        Create account
                       </button>
                     </>
                   )}

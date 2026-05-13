@@ -3,7 +3,7 @@ import axios from "../lib/axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { User, Mail, Lock, Eye, EyeOff, Leaf } from "lucide-react";
-import "../styles/login.css";
+import "../styles/auth.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -85,7 +85,7 @@ function Register() {
         {/* Tabs */}
         <div className="auth-tabs">
           <button className="auth-tab" onClick={() => navigate(`/login${location.search}`)}>
-            Sign in
+            Login
           </button>
           <button className="auth-tab active">
             Create account
@@ -187,9 +187,6 @@ function Register() {
           </p>
         </div>
 
-        <p className="auth-terms">
-          By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy</a>.
-        </p>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 .auth-page {
   display: flex;
   min-height: 100vh;
-  font-family: 'Georgia', serif;
+  font-family: 'arial';
 }
 
 /* ===== LEFT PANEL ===== */
@@ -20,7 +20,7 @@
 .auth-left-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&auto=format&fit=crop');
+  background-image: url('../../public/assets/auth.jpg');
   background-size: cover;
   background-position: center;
   z-index: 0;
@@ -28,13 +28,6 @@
 
 .auth-left-overlay {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 30, 10, 0.45) 0%,
-    rgba(10, 30, 10, 0.55) 100%
-  );
-  z-index: 1;
 }
 
 .auth-left-top,
@@ -47,7 +40,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: #fff;
+  color: #ffffff;
   font-size: 0.95rem;
   font-family: sans-serif;
   font-weight: 600;
@@ -341,10 +334,6 @@
   text-align: center;
 }
 
-.auth-terms a {
-  color: #888;
-  text-decoration: underline;
-}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 860px) {

@@ -128,7 +128,7 @@ function Profile() {
               </>
             ) : (
               <button className="profile_edit_btn" onClick={() => setEditing(true)}>
-                ✏️ Edit profile
+                Edit profile
               </button>
             )}
           </div>

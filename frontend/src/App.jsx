@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import CartDrawer from "./components/cartDrawer";
 
@@ -27,7 +27,10 @@ import DeliveryDashboard from "./pages/DeliveryDashboard";
 import DeliveryOrders from "./pages/DeliveryOrders";
 import DeliveryOrderDetail from "./pages/DeliveryOrderDetail";
 import UnauthorizedPage from "./pages/aunothorized";
+import { NotFound } from "./pages/notFound";
+import Testing from "./pages/testing";
 import { DeliveryProvider } from "./context/deliveryContext";
+import FindUs from "./pages/findUs";
 
 function App() {
   return (
@@ -95,6 +98,10 @@ function App() {
             }
           />
           <Route path="/unauthorizedPage" element={<UnauthorizedPage />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" />} />
+          <Route path="/find-us" element={<FindUs />} />
+          {/* <Route path="/testing" element={<Testing />} /> */}
         </Routes>
       </Router>
     </>
