@@ -50,9 +50,22 @@
 }
 
 .prod_search_wrap {
+  display: flex;
+  gap: 1rem;
   position: relative;
   flex: 1;
   max-width: 380px;
+}
+
+.prod_search_wrap button {
+  padding: 9px 24px;
+  border-radius: 8px;
+  background: #2d6a4f;
+  color: white;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .prod_search_icon {

@@ -438,6 +438,7 @@
 .badge-unpaid      { background: #fee2e2; color: #b91c1c; }
 .badge-paid        { background: #dcfce7; color: #15803d; }
 .badge-collected_by_deliveryman { background: #ffedd5; color: #c2410c; }
+.badge-collected                { background: #ffedd5; color: #c2410c; }
 
 /* ══════════════════════════
    ACTION BUTTONS

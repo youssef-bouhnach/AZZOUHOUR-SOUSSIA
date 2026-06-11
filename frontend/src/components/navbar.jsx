@@ -165,6 +165,7 @@ function Navbar() {
             <Link to="/categories" className="navbar_link">Categories</Link>
             <Link to="/about"      className="navbar_link">Our Story</Link>
             <Link to="/contact"    className="navbar_link">Contact</Link>
+            <Link to="/find-us"    className="navbar_link">Find Us</Link>
 
             {/* Search trigger */}
             <button
@@ -255,10 +256,10 @@ function Navbar() {
                     <>
                       <p className="nav_profile_guest">Welcome!</p>
                       <button className="nav_profile_item" onClick={() => { navigate("/login"); setProfileOpen(false); }}>
-                        🔑 Log in
+                        Log in
                       </button>
                       <button className="nav_profile_item" onClick={() => { navigate("/register"); setProfileOpen(false); }}>
-                        ✏️ Create account
+                        Create account
                       </button>
                     </>
                   )}

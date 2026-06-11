@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios, { STORAGE_URL } from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import { useFavorite } from "../context/favoriteContext";
 import Navbar from "../components/navbar.jsx";
@@ -27,7 +27,7 @@ function ProductCard({ product, onView }) {
       {/* Image */}
       <div className="prod_card_img_wrap">
         <img
-          src={product.image ? `${STORAGE_URL}/${product.image}` : "/placeholder.svg"}
+          src={product.image ? getImageUrl(product.image) : "/placeholder.svg"}
           alt={product.name}
           className="prod_card_img"
           loading="lazy"
@@ -105,7 +105,8 @@ function Products() {
         ? products.filter(
             (p) =>
               p.name.toLowerCase().includes(q) ||
-              (p.description || "").toLowerCase().includes(q)
+              (p.description || "").toLowerCase().includes(q) ||
+              p.color.toLowerCase().includes(q)
           )
         : products
     );
@@ -128,7 +129,7 @@ function Products() {
         {/* Toolbar */}
         <div className="prod_toolbar" >
           <div className="prod_search_wrap">
-            <span className="prod_search_icon">🔍</span>
+            <span className="prod_search_icon"></span>
             <input
               type="text"
               className="prod_search"
@@ -136,6 +137,12 @@ function Products() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            {/* ///////////////////////////////////////_______________________________ */}
+            {
+              filtered.length > 0 ? 
+              <button onClick={() => setSearch("")}>Réinitialiser</button>
+              : ""
+            }
           </div>
           {!loading && (
             <p className="prod_count">

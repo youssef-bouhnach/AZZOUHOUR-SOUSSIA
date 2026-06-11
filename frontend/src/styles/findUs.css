@@ -1,0 +1,187 @@
+/* ── Section wrapper ── */
+.findus-section {
+  padding: 3rem 2rem;
+  min-height: 100vh;
+  background-color: #f7f6f3;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Grid ── */
+.findus-parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.findus-div1 { grid-area: 1 / 1 / 2 / 3; }
+.findus-div2 { grid-area: 2 / 1 / 3 / 2; }
+.findus-div3 { grid-area: 2 / 2 / 3 / 3; }
+.findus-div4 { grid-area: 3 / 1 / 4 / 2; }
+.findus-div5 { grid-area: 3 / 2 / 4 / 3; }
+.findus-div6 { grid-area: 4 / 1 / 5 / 3; }
+
+/* ── Card base ── */
+.findus-parent > div {
+  background: #ffffff;
+  border: 0.5px solid #e5e3dc;
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.findus-parent > div:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* ── div1: header ── */
+.findus-div1 {
+  background: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+  padding: 2rem 2rem !important;
+}
+
+.findus-brand {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.findus-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 6px 0 4px;
+  line-height: 1.2;
+}
+
+.findus-subtitle {
+  font-size: 15px;
+  color: #aaa;
+  margin: 0;
+}
+
+/* ── div5: WhatsApp ── */
+.findus-div5 {
+  cursor: pointer;
+}
+
+/* ── Card icon ── */
+.card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f2f1ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.whatsapp-icon {
+  background: #e8f8f0;
+  color: #25D366;
+}
+
+/* ── Card text ── */
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0;
+}
+
+.card-value {
+  font-size: 15px;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.card-link {
+  text-decoration: none;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.card-link:hover {
+  color: #555;
+}
+
+.card-hint {
+  font-size: 12px;
+  color: #bbb;
+  margin: 0;
+}
+
+/* ── Opening hours ── */
+.opening-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.hours-time {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.hours-closed {
+  font-weight: 500;
+  color: #e05252;
+}
+
+/* ── Button ── */
+.findus-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+  background: transparent;
+  border: 0.5px solid #d0cec8;
+  border-radius: 8px;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.findus-btn:hover {
+  background: #f2f1ee;
+  border-color: #bbb;
+}
+
+/* ── Map ── */
+.findus-div6 {
+  padding: 0 !important;
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.findus-div6:hover {
+  transform: none !important;
+}

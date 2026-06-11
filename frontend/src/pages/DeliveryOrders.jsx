@@ -94,13 +94,20 @@ function StatusBadge({ status }) {
 
 function PaymentBadge({ status }) {
   const map = {
-    unpaid:   "badge-unpaid",
-    paid:     "badge-paid",
-    refunded: "badge-shipped",
+    unpaid:                    "badge-unpaid",
+    paid:                      "badge-paid",
+    refunded:                  "badge-shipped",
+    collected_by_deliveryman:  "badge-collected",
+  };
+  const labels = {
+    unpaid:                   "Unpaid",
+    paid:                     "Paid",
+    refunded:                 "Refunded",
+    collected_by_deliveryman: "Collected",
   };
   return (
     <span className={`delivery-badge ${map[status] ?? "badge-unpaid"}`}>
-      {status?.replace(/_/g, " ")}
+      {labels[status] ?? status?.replace(/_/g, " ")}
     </span>
   );
 }

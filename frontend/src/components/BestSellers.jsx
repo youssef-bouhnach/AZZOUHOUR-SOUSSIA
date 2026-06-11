@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios, { STORAGE_URL } from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import "../styles/bestSellers.css";
 
 function BestSellers() {
@@ -67,7 +67,7 @@ function BestSellers() {
                 <img
                   src={
                     product.image
-                      ? `${STORAGE_URL}/${product.image}`
+                      ? getImageUrl(product.image)
                       : "/placeholder.svg"
                   }
                   alt={product.name}

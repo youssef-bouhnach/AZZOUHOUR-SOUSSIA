@@ -78,7 +78,8 @@ class DeliveryManController extends Controller
             $assignment->update(['status' => 'delivered']);
             $order->update([
                 'status'         => 'delivery',
-                'payment_status' => 'paid',
+                // Cash collected by the deliveryman — admin must confirm to mark as paid
+                'payment_status' => 'collected_by_deliveryman',
             ]);
         }
 

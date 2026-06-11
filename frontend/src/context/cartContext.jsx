@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "../config/api";
 import { useAuth } from "./authContext";
 
@@ -28,7 +34,7 @@ const calcGuestTotal = (items) =>
   items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -61,8 +67,8 @@ export const CartProvider = ({ children }) => {
             product_id: item.product_id,
             variant_id: item.variant_id ?? null,
             quantity: item.quantity,
-          })
-        )
+          }),
+        ),
       );
     } catch (err) {
       console.error("Failed to merge guest cart", err);
@@ -73,6 +79,9 @@ export const CartProvider = ({ children }) => {
 
   // ── When user changes (login/logout) ──
   useEffect(() => {
+    // Wait for auth to finish resolving before deciding guest vs logged-in
+    if (authLoading) return;
+
     if (user) {
       // Merge any guest items then fetch the full server cart
       mergeGuestCart().then(() => fetchCart());
@@ -82,13 +91,17 @@ export const CartProvider = ({ children }) => {
       setItems(guestItems);
       setTotal(calcGuestTotal(guestItems));
     }
-  }, [user, fetchCart, mergeGuestCart]);
+  }, [user, authLoading, fetchCart, mergeGuestCart]);
 
   // ── Add to cart ──
   const addToCart = async (product, quantity = 1, variantId = null) => {
     if (user) {
       const productId = typeof product === "object" ? product.id : product;
-      await axios.post("/api/cart", { product_id: productId, variant_id: variantId, quantity });
+      await axios.post("/api/cart", {
+        product_id: productId,
+        variant_id: variantId,
+        quantity,
+      });
       await fetchCart();
     } else {
       // Guest: use product_id + variant_id as the unique key
@@ -96,16 +109,26 @@ export const CartProvider = ({ children }) => {
       const key = variantId ? `${product.id}_v${variantId}` : `${product.id}`;
       const existing = guestItems.find((i) => i._key === key);
 
-      const unitPrice = variantId && product.variants
-        ? parseFloat(product.variants.find(v => v.id === variantId)?.price ?? product.promo_price ?? product.price)
-        : parseFloat(product.promo_price ?? product.price);
+      const unitPrice =
+        variantId && product.variants
+          ? parseFloat(
+              product.variants.find((v) => v.id === variantId)?.price ??
+                product.promo_price ??
+                product.price,
+            )
+          : parseFloat(product.promo_price ?? product.price);
 
-      const stock = variantId && product.variants
-        ? (product.variants.find(v => v.id === variantId)?.stock ?? product.stock)
-        : product.stock;
+      const stock =
+        variantId && product.variants
+          ? (product.variants.find((v) => v.id === variantId)?.stock ??
+            product.stock)
+          : product.stock;
 
       if (existing) {
-        existing.quantity = Math.min(existing.quantity + quantity, stock ?? 999);
+        existing.quantity = Math.min(
+          existing.quantity + quantity,
+          stock ?? 999,
+        );
         existing.subtotal = unitPrice * existing.quantity;
       } else {
         guestItems.push({
@@ -137,7 +160,9 @@ export const CartProvider = ({ children }) => {
       await axios.delete(`/api/cart/${itemId}`);
       await fetchCart();
     } else {
-      const updated = loadGuestCart().filter((i) => i._key !== itemId && i.product_id !== itemId);
+      const updated = loadGuestCart().filter(
+        (i) => i._key !== itemId && i.product_id !== itemId,
+      );
       saveGuestCart(updated);
       setItems(updated);
       setTotal(calcGuestTotal(updated));
@@ -151,9 +176,9 @@ export const CartProvider = ({ children }) => {
       await fetchCart();
     } else {
       const updated = loadGuestCart().map((i) =>
-        (i._key === itemId || i.product_id === itemId)
+        i._key === itemId || i.product_id === itemId
           ? { ...i, quantity, subtotal: i.unit_price * quantity }
-          : i
+          : i,
       );
       saveGuestCart(updated);
       setItems(updated);

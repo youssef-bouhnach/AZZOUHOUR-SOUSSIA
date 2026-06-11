@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios, { STORAGE_URL } from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/GreenFooter.jsx";
 import "../styles/productCard.css";
@@ -41,7 +41,7 @@ function CategoriesProducts() {
           <div className="products_grid">
             {products.map((product) => (
               <div key={product.id} className="product_card" onClick={() => navigate(`/products/detail/${product.id}`)}>
-                <img src={`${STORAGE_URL}/${product.image}`} alt={product.name} className="product_card_img" />
+                <img src={getImageUrl(product.image)} alt={product.name} className="product_card_img" />
                 <div className="product_card_body">
                   <p className="product_card_name">{product.name}</p>
                   <p className="product_card_desc">{product.description}</p>

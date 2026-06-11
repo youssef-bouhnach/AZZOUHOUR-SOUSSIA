@@ -1,4 +1,4 @@
-import axios, { STORAGE_URL } from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/cartContext";
@@ -126,7 +126,7 @@ function ProductsDetail() {
     const parts = [];
     if (v.size)     parts.push(v.size);
     if (v.diameter) parts.push(`Ø ${v.diameter} cm`);
-    if (v.height)   parts.push(`H ${v.height} cm`);
+    if (v.height)   parts.push(`H ${v.height} m`);
     if (v.weight)   parts.push(`${v.weight} kg`);
     if (v.duration) parts.push(v.duration);
     return parts.length ? parts.join(" · ") : `Variante #${v.id}`;
@@ -152,7 +152,7 @@ function ProductsDetail() {
             <div className="pd_img_wrap">
               {!imgLoaded && <div className="pd_img_placeholder" />}
               <img
-                src={product.image ? `${STORAGE_URL}/${product.image}` : "/placeholder.svg"}
+                src={product.image ? getImageUrl(product.image) : "/placeholder.svg"}
                 alt={product.name}
                 className={`pd_img ${imgLoaded ? "pd_img_loaded" : ""}`}
                 onLoad={() => setImgLoaded(true)}

@@ -41,23 +41,23 @@ class LatestOrders extends BaseWidget
                 Tables\Columns\BadgeColumn::make('status')
                     ->label(fn () => __('admin.order.status'))
                     ->colors([
-                        'gray'    => 'pending',
+                        'gray' => 'pending',
                         'success' => 'paid',
                         'primary' => 'processing',
-                        'info'    => 'shipped',
+                        'info' => 'shipped',
                         'warning' => 'delivered',
-                        'danger'  => 'cancelled',
+                        'danger' => 'cancelled',
                     ])
-                    ->formatStateUsing(fn ($state) => __('admin.status.' . $state)),
+                    ->formatStateUsing(fn ($state) => __($state)),
 
                 Tables\Columns\BadgeColumn::make('payment_status')
                     ->label(fn () => __('admin.order.payment'))
                     ->colors([
-                        'danger'  => 'unpaid',
+                        'danger' => 'unpaid',
                         'success' => 'paid',
                         'warning' => 'refunded',
                     ])
-                    ->formatStateUsing(fn ($state) => __('admin.payment_status.' . $state)),
+                    ->formatStateUsing(fn ($state) => __($state)),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(fn () => __('admin.order.date'))

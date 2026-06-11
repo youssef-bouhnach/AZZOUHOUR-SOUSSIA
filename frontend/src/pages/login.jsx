@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../lib/axios";
 import { useAuth } from "../context/authContext";
 import { Mail, Lock, Eye, EyeOff, Leaf } from "lucide-react";
-import "../styles/login.css";
+import "../styles/auth.css";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -75,9 +75,13 @@ function Login() {
             the door of your dreams.
           </p>
           <div className="auth-badges">
-            <span className="auth-badge">🌱 Seeds &amp; Soil</span>
-            <span className="auth-badge">🌸 Blooms</span>
-            <span className="auth-badge">🌳 Trees</span>
+            <span className="auth-badge">Seeds &amp; Soil</span>
+            <span className="auth-badge">Blooms</span>
+            <span className="auth-badge">Trees</span>
+            <span className="auth-badge">Plants</span>
+            <span className="auth-badge">Palms</span>
+            <span className="auth-badge">Vases</span>
+            <span className="auth-badge">Services</span>
           </div>
         </div>
       </div>
@@ -87,7 +91,7 @@ function Login() {
         {/* Tabs */}
         <div className="auth-tabs">
           <button className="auth-tab active">
-            Sign in
+            Login
           </button>
           <button className="auth-tab" onClick={() => navigate(`/register${location.search}`)}>
             Create account
@@ -95,7 +99,7 @@ function Login() {
         </div>
 
         <h2 className="auth-form-title">Welcome back.</h2>
-        <p className="auth-form-subtitle">Sign in to continue growing with AZZOHOUR SOUSSIYA.</p>
+        <p className="auth-form-subtitle">Login to continue growing with AZZOHOUR SOUSSIYA.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
@@ -147,7 +151,7 @@ function Login() {
             {loading ? (
               <><div className="spinner" /> Signing in...</>
             ) : (
-              "Sign in →"
+              "Login →"
             )}
           </button>
         </form>
@@ -161,9 +165,6 @@ function Login() {
           </p>
         </div>
 
-        <p className="auth-terms">
-          By continuing you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy</a>.
-        </p>
       </div>
     </div>
   );

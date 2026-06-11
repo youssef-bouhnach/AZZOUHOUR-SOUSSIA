@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import axios, { STORAGE_URL } from "../config/api";
+import axios, { getImageUrl } from "../config/api";
 import Navbar from "../components/navbar.jsx";
 import Footer from "../components/GreenFooter.jsx";
 import "../styles/profile.css";
@@ -24,7 +24,7 @@ function Profile() {
   }
 
   const avatarSrc = preview
-    || (user.avatar ? `${STORAGE_URL}/${user.avatar}` : null);
+    || (user.avatar ? getImageUrl(user.avatar) : null);
 
   const memberSince = new Date(user.created_at).toLocaleDateString("en-US", {
     year: "numeric", month: "long", day: "numeric",
@@ -128,7 +128,7 @@ function Profile() {
               </>
             ) : (
               <button className="profile_edit_btn" onClick={() => setEditing(true)}>
-                ✏️ Edit profile
+                Edit profile
               </button>
             )}
           </div>
