@@ -73,9 +73,13 @@ function Register() {
             the door of your dreams.
           </p>
           <div className="auth-badges">
-            <span className="auth-badge">🌱 Seeds &amp; Soil</span>
-            <span className="auth-badge">🌸 Blooms</span>
-            <span className="auth-badge">🌳 Trees</span>
+            <span className="auth-badge">Seeds &amp; Soil</span>
+            <span className="auth-badge">Blooms</span>
+            <span className="auth-badge">Trees</span>
+            <span className="auth-badge">Plants</span>
+            <span className="auth-badge">Palms</span>
+            <span className="auth-badge">Vases</span>
+            <span className="auth-badge">Services</span>
           </div>
         </div>
       </div>
@@ -182,7 +186,7 @@ function Register() {
           <p className="footer-text">
             Already have an account?{" "}
             <span className="footer-link" onClick={() => navigate(`/login${location.search}`)}>
-              Sign in
+              Login
             </span>
           </p>
         </div>

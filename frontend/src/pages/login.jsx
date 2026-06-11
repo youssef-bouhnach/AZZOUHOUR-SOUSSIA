@@ -99,7 +99,7 @@ function Login() {
         </div>
 
         <h2 className="auth-form-title">Welcome back.</h2>
-        <p className="auth-form-subtitle">Sign in to continue growing with AZZOHOUR SOUSSIYA.</p>
+        <p className="auth-form-subtitle">Login to continue growing with AZZOHOUR SOUSSIYA.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
@@ -151,7 +151,7 @@ function Login() {
             {loading ? (
               <><div className="spinner" /> Signing in...</>
             ) : (
-              "Sign in →"
+              "Login →"
             )}
           </button>
         </form>

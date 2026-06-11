@@ -165,6 +165,7 @@ function Navbar() {
             <Link to="/categories" className="navbar_link">Categories</Link>
             <Link to="/about"      className="navbar_link">Our Story</Link>
             <Link to="/contact"    className="navbar_link">Contact</Link>
+            <Link to="/find-us"    className="navbar_link">Find Us</Link>
 
             {/* Search trigger */}
             <button

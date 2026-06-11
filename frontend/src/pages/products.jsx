@@ -105,7 +105,8 @@ function Products() {
         ? products.filter(
             (p) =>
               p.name.toLowerCase().includes(q) ||
-              (p.description || "").toLowerCase().includes(q)
+              (p.description || "").toLowerCase().includes(q) ||
+              p.color.toLowerCase().includes(q)
           )
         : products
     );
@@ -128,7 +129,7 @@ function Products() {
         {/* Toolbar */}
         <div className="prod_toolbar" >
           <div className="prod_search_wrap">
-            <span className="prod_search_icon">🔍</span>
+            <span className="prod_search_icon"></span>
             <input
               type="text"
               className="prod_search"
@@ -136,6 +137,12 @@ function Products() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            {/* ///////////////////////////////////////_______________________________ */}
+            {
+              filtered.length > 0 ? 
+              <button onClick={() => setSearch("")}>Réinitialiser</button>
+              : ""
+            }
           </div>
           {!loading && (
             <p className="prod_count">
