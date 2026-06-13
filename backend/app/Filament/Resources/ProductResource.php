@@ -70,7 +70,13 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'available' => 'available',
+                        'out_of_stock' => 'out_of_stock',
+                        'coming_soon' => 'coming_soon',
+                    ])
+                    ->default('available')
                     ->required(),
                 Forms\Components\Toggle::make('is_featured')
                     ->required(),

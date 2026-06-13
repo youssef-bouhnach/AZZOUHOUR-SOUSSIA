@@ -82,6 +82,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('image')
+                    ->label(fn() => __('admin.categorie.image'))
                     ->url(fn($record) => $record->image), // use URL as-is
                 Tables\Columns\TextColumn::make('name')
                     ->label(fn() => __('admin.category.name'))
