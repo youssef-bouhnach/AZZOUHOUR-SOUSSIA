@@ -1,7 +1,10 @@
 .cart_page {
+  flex: 1;
+  width: 100%;
   max-width: 1200px;
-  margin: 48px auto;
-  padding: 0 24px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  box-sizing: border-box;
 }
 
 .cart_page_title {

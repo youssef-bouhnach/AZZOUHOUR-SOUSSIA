@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-ro
 import ProtectedRoute from "./components/protectedRoute";
 import CartDrawer from "./components/cartDrawer";
 
-import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Accueil from "./pages/accueil";
@@ -19,7 +18,6 @@ import Checkout from "./pages/checkout";
 import OrderSuccess from "./pages/orderSuccess";
 import Profile from "./pages/profile";
 import Orders from "./pages/orders";
-import Blog from "./pages/blog";
 import Contact from "./pages/contact";
 import About from "./pages/about";
 import Favorites from "./pages/favorites";
@@ -28,7 +26,6 @@ import DeliveryOrders from "./pages/DeliveryOrders";
 import DeliveryOrderDetail from "./pages/DeliveryOrderDetail";
 import UnauthorizedPage from "./pages/aunothorized";
 import { NotFound } from "./pages/notFound";
-import Testing from "./pages/testing";
 import { DeliveryProvider } from "./context/deliveryContext";
 import FindUs from "./pages/findUs";
 
@@ -63,7 +60,6 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/favorites" element={<Favorites />} />
@@ -101,7 +97,6 @@ function App() {
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" />} />
           <Route path="/find-us" element={<FindUs />} />
-          {/* <Route path="/testing" element={<Testing />} /> */}
         </Routes>
       </Router>
     </>

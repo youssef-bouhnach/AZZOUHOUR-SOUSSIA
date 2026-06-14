@@ -8,7 +8,6 @@ const navLinks = [
   { to: "/categories", label: "Categories"  },
   { to: "/about",      label: "Our Story"   },
   { to: "/contact",    label: "Contact"     },
-  { to: "/blog",       label: "Blog"        },
 ];
 
 const accountLinks = [
