@@ -217,11 +217,11 @@ function ProductsDetail() {
               {product.origin && <div className="pd_meta_item"><span className="pd_meta_label">Origine</span><span className="pd_meta_val">{product.origin}</span></div>}
               <div className="pd_meta_item">
                 <span className="pd_meta_label">Emplacement</span>
-                <span className="pd_meta_val">{product.is_indoor ? "Intérieur 🏠" : "Extérieur 🌿"}</span>
+                <span className="pd_meta_val">{product.is_indoor ? "Intérieur " : "Extérieur "}</span>
               </div>
               <div className="pd_meta_item">
                 <span className="pd_meta_label">Stock</span>
-                <span className="pd_meta_val">{activeStock > 0 ? `${activeStock} disponibles` : "Épuisé"}</span>
+                <span className="pd_meta_val">{activeStock > 0 ? "disponibles" : "Épuisé"}</span>
               </div>
             </div>
 

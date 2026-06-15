@@ -59,7 +59,9 @@ function Register() {
         <div className="auth-left-top">
           <div className="auth-brand">
             <Leaf />
-            AZZOHOUR SOUSSIYA
+            <button onClick={ () => navigate("/") } >
+              AZZOHOUR SOUSSIYA
+            </button>
           </div>
         </div>
 

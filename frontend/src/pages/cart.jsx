@@ -15,8 +15,31 @@ function Cart() {
     return (
       <>
         <Navbar />
-        <div className="cart_page_empty">
-          <p>Please <span onClick={() => navigate("/login")} className="cart_login_link">log in</span> to view your cart.</p>
+        <div className="checkout_auth_gate">
+          <div className="checkout_auth_box">
+            <h2>Sign in to complete your order</h2>
+            <p>You need an account to place an order. It only takes a minute.</p>
+            <div className="checkout_auth_actions">
+              <button
+                className="checkout_auth_login"
+                onClick={() => navigate("/login?redirect=/cart")}
+              >
+                Log in
+              </button>
+              <button
+                className="checkout_auth_register"
+                onClick={() => navigate("/register?redirect=/cart")}
+              >
+                Create an account
+              </button>
+            </div>
+            <span
+              className="checkout_auth_back"
+              onClick={() => navigate("/")}
+            >
+              ← Back to Home
+            </span>
+          </div>
         </div>
         <Footer />
       </>
@@ -26,7 +49,7 @@ function Cart() {
   return (
     <>
       <Navbar />
-      <main className="page_content" style={{height: '100vh'}} >
+      <main className="page_content">
         <div className="cart_page">
         <h1 className="cart_page_title">Shopping Cart</h1>
 

@@ -13,7 +13,7 @@ function FindUs() {
   };
 
   const openWhatsApp = () => {
-    window.open("https://wa.me/212762903524", "_blank");
+    window.open("https://wa.me/212668057583", "_blank");
   };
 
   return (
@@ -120,7 +120,7 @@ function FindUs() {
             </div>
             <h3 className="card-label">Call us</h3>
             <a href="tel:+212612657854" className="card-value card-link">
-              +212 612 657 854
+              +212 668 057 583
             </a>
             <p className="card-hint">Tap to call</p>
           </div>

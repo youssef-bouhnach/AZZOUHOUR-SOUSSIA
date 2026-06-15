@@ -61,6 +61,7 @@ Route::post('/categories', [CategoryController::class, 'store']);
 // filter products by categorie
 Route::get('/categories/{category:slug}/products', [ProductController::class, 'byCategory']);
 
+// , 'deliverymanMIDD:user' we have to solve this problem !!!!! 
 Route::middleware('auth:sanctum')->group(function () {
 
     // Profile

@@ -127,42 +127,24 @@ function Navbar() {
                 Shop
               </button>
               {shopOpen && (
-                <div className="nav_dropdown">
-                  <div className="nav_dropdown_top">
-                    <button
-                      className="nav_all_products"
-                      onClick={() => { navigate("/products"); setShopOpen(false); }}
-                    >
-                      All Products →
-                    </button>
-                  </div>
-                  <div className="nav_category_grid">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat.id}
-                        className="nav_category_item"
-                        onClick={() => { navigate(`/categories/${cat.slug}/products`); setShopOpen(false); }}
-                      >
-                        <div
-                          className="nav_category_img"
-                          style={{ backgroundImage: `url(/assets/categories/categorie_${cat.slug}.jfif)` }}
-                        />
-                        <span>{cat.name}</span>
-                      </button>
-                    ))}
-                    <button
-                      className="nav_category_item nav_category_all"
-                      onClick={() => { navigate("/categories"); setShopOpen(false); }}
-                    >
-                      <div className="nav_category_img nav_category_img_all"><span>🌿</span></div>
-                      <span>All Categories</span>
-                    </button>
-                  </div>
+                <div className="nav_dropdown nav_shop_dropdown">
+                  <button
+                    className="nav_shop_item"
+                    onClick={() => { navigate("/products"); setShopOpen(false); }}
+                  >
+                    <span>Products</span>
+                  </button>
+                  <button
+                    className="nav_shop_item"
+                    onClick={() => { navigate("/categories"); setShopOpen(false); }}
+                  >
+                    
+                    <span>Categories</span>
+                  </button>
                 </div>
               )}
             </div>
 
-            <Link to="/categories" className="navbar_link">Categories</Link>
             <Link to="/about"      className="navbar_link">Our Story</Link>
             <Link to="/contact"    className="navbar_link">Contact</Link>
             <Link to="/find-us"    className="navbar_link">Find Us</Link>

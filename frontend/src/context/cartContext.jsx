@@ -112,10 +112,10 @@ export const CartProvider = ({ children }) => {
       const unitPrice =
         variantId && product.variants
           ? parseFloat(
-              product.variants.find((v) => v.id === variantId)?.price ??
-                product.promo_price ??
-                product.price,
-            )
+            product.variants.find((v) => v.id === variantId)?.price ??
+            product.promo_price ??
+            product.price,
+          )
           : parseFloat(product.promo_price ?? product.price);
 
       const stock =
@@ -185,6 +185,18 @@ export const CartProvider = ({ children }) => {
       setTotal(calcGuestTotal(updated));
     }
   };
+  // clear cart from all items
+  const clearCart = async () => {
+    if (user) {
+      try {
+        await Promise.all(items.map((item) => axios.delete(`/api/cart/${item.id}`)));
+      } catch {
+        console.error("items can't be deleted from the cart !");
+      }
+      setItems([]);
+      setTotal(0);
+    }
+  }
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
@@ -205,6 +217,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         fetchCart,
+        clearCart
       }}
     >
       {children}
@@ -212,4 +225,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => useContext(CartContext); 
